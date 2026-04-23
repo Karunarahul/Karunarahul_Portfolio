@@ -26,9 +26,9 @@ export default function CustomCursor() {
         width: ${8 - i}px;
         height: ${8 - i}px;
         border-radius: 50%;
-        background: rgba(0, 212, 255, ${0.6 - i * 0.07});
+        background: rgba(79, 110, 242, ${0.6 - i * 0.07});
         pointer-events: none;
-        z-index: 9998;
+        z-index: 999998;
         transform: translate(-50%, -50%);
         filter: blur(${i * 0.5}px);
         transition: none;
@@ -100,13 +100,13 @@ export default function CustomCursor() {
           top: cursorY,
           x: '-50%',
           y: '-50%',
-          zIndex: 9999,
+          zIndex: 999999,
           pointerEvents: 'none',
           width: 10,
           height: 10,
           borderRadius: '50%',
           background: '#4f6ef2',
-          boxShadow: '0 0 10px #4f6ef2, 0 0 20px rgba(0,212,255,0.5)',
+          boxShadow: '0 0 10px #4f6ef2, 0 0 20px rgba(79,110,242,0.5)',
         }}
       />
       {/* Ring */}
@@ -118,13 +118,13 @@ export default function CustomCursor() {
           top: ringY,
           x: '-50%',
           y: '-50%',
-          zIndex: 9998,
+          zIndex: 999998,
           pointerEvents: 'none',
           width: 36,
           height: 36,
           borderRadius: '50%',
-          border: '1.5px solid rgba(0, 212, 255, 0.7)',
-          boxShadow: '0 0 12px rgba(0,212,255,0.3)',
+          border: '1.5px solid rgba(79, 110, 242, 0.7)',
+          boxShadow: '0 0 12px rgba(79,110,242,0.3)',
         }}
       />
     </>
