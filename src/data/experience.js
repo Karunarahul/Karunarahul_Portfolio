@@ -1,23 +1,37 @@
 export const experience = [
   {
     id: 1,
-    role: 'President',
-    org: 'Pulse — ECE Student Body',
-    period: '2023 – Present',
-    description: 'Leading the ECE student body of 800+ members, organizing technical events, industry connects, and research initiatives across the department.',
-    highlights: ['Organized 12+ technical workshops', 'Led team of 40 core members', 'Established industry partnerships'],
+    role: 'App Developer Intern',
+    org: 'Neti Solutions',
+    period: 'Dec 2025 – Present',
+    description: 'Spearheading the end-to-end design and development of an innovative Android application for comprehensive fitness and diet tracking.',
+    highlights: [
+      'Conceptualized and implemented intuitive user interfaces',
+      'Developed robust data management systems for health metrics',
+      'Handled front-end design and back-end logic integration'
+    ],
     color: '#4f6ef2',
     side: 'left',
   },
   {
     id: 2,
+    role: 'President',
+    org: 'Pulse — ECE Student Body',
+    period: '2023 – Present',
+    description: 'Leading the ECE student body of 800+ members, organizing technical events, industry connects, and research initiatives across the department.',
+    highlights: ['Organized 12+ technical workshops', 'Led team of 40 core members', 'Established industry partnerships'],
+    color: '#7c6af7',
+    side: 'right',
+  },
+  {
+    id: 3,
     role: 'Co-Convener',
     org: 'CEA — KL University',
     period: '2022 – 2023',
     description: 'Co-organized the Circuit Engineering Association annual tech fest, coordinating events across robotics, IoT, and embedded systems domains.',
     highlights: ['Coordinated 5 major events', '500+ student participants', 'Guest lecture series management'],
-    color: '#7c6af7',
-    side: 'right',
+    color: '#7b93f5',
+    side: 'left',
   },
 ];
 
