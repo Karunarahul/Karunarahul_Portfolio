@@ -73,7 +73,7 @@ export default function About() {
               is improving human lives — which drives my focus on healthcare applications.
             </p>
             <p className="text-gray-400 text-base leading-relaxed font-body">
-              Beyond engineering, I serve as President of the Pulse ECE Student Body, leading 800+ students
+              Beyond engineering, I serve as President of the Pulse ECE Student Body, leading 300+ students
               and fostering a culture of innovation, collaboration, and technical excellence.
             </p>
 
@@ -81,7 +81,7 @@ export default function About() {
             <div className="grid grid-cols-3 gap-4 mt-10">
               {[
                 { value: '3+', label: 'Major Projects' },
-                { value: '800+', label: 'Students Led' },
+                { value: '300+', label: 'Students Led' },
                 { value: '4+', label: 'Certifications' },
               ].map((stat) => (
                 <div
