@@ -8,7 +8,7 @@ import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 
 const socials = [
   { Icon: FaGithub, label: 'GitHub', href: 'https://github.com/Karunarahul', color: '#fff' },
-  { Icon: FaLinkedinIn, label: 'LinkedIn', href: 'www.linkedin.com/in/karuna-rahul-mamidi', color: '#0ea5e9' },
+  { Icon: FaLinkedinIn, label: 'LinkedIn', href: 'https://linkedin.com/in/karuna-rahul-mamidi', color: '#0ea5e9' },
   { Icon: FaTwitter, label: 'Twitter', href: 'https://twitter.com/', color: '#00d4ff' },
 ];
 
