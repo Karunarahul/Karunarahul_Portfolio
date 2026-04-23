@@ -4,19 +4,26 @@
 
 /* ─── Design Tokens ─────────────────────────────────────────── */
 :root {
-  --color-bg: #020817;
-  --color-navy: #0a1628;
-  --color-navy-light: #0f2040;
-  --color-cyan: #00d4ff;
-  --color-cyan-dark: #0099cc;
-  --color-purple: #7c3aed;
-  --color-purple-light: #a855f7;
-  --color-pink: #f0abfc;
-  --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 40px rgba(0, 212, 255, 0.2);
-  --glow-purple: 0 0 20px rgba(124, 58, 237, 0.5), 0 0 40px rgba(124, 58, 237, 0.2);
-  --glow-pink: 0 0 20px rgba(240, 171, 252, 0.5);
+  /* Backgrounds */
+  --color-bg:           #07090f;
+  --color-navy:         #0d1220;
+  --color-navy-light:   #131929;
+
+  /* Professional Accent Palette */
+  --color-blue:         #4f6ef2;   /* primary indigo-blue */
+  --color-blue-light:   #7b93f5;   /* lighter blue for hover */
+  --color-blue-dark:    #3451c7;   /* deeper blue */
+  --color-violet:       #7c6af7;   /* soft violet secondary */
+  --color-violet-light: #a594f9;   /* lighter violet */
+  --color-slate:        #8892b0;   /* muted slate text */
+
+  /* Glows — subdued for professionalism */
+  --glow-blue:   0 0 20px rgba(79,110,242,0.35), 0 0 40px rgba(79,110,242,0.15);
+  --glow-violet: 0 0 20px rgba(124,106,247,0.35), 0 0 40px rgba(124,106,247,0.15);
+
+  /* Typography */
   --font-heading: 'Poppins', sans-serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body:    'Inter', sans-serif;
 }
 
 /* ─── Base Reset ─────────────────────────────────────────────── */
@@ -33,7 +40,7 @@ html {
 
 body {
   background-color: var(--color-bg);
-  color: #e2e8f0;
+  color: #dce3f0;
   font-family: var(--font-body);
   overflow-x: hidden;
   cursor: none;
@@ -45,65 +52,71 @@ body {
 }
 
 /* ─── Custom Scrollbar ───────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-navy);
-}
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--color-navy); }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--color-cyan), var(--color-purple));
+  background: linear-gradient(to bottom, var(--color-blue), var(--color-violet));
   border-radius: 3px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-cyan);
-}
+::-webkit-scrollbar-thumb:hover { background: var(--color-blue-light); }
 
 /* ─── Glassmorphism Utility ──────────────────────────────────── */
 @layer components {
   .glass {
     @apply backdrop-blur-md;
-    background: rgba(10, 22, 40, 0.6);
-    border: 1px solid rgba(0, 212, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: rgba(13, 18, 32, 0.65);
+    border: 1px solid rgba(79, 110, 242, 0.14);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
-  .glass-purple {
+  .glass-violet {
     @apply backdrop-blur-md;
-    background: rgba(15, 10, 40, 0.6);
-    border: 1px solid rgba(124, 58, 237, 0.2);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: rgba(18, 15, 42, 0.65);
+    border: 1px solid rgba(124, 106, 247, 0.18);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
-  .glow-border-cyan {
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(0, 212, 255, 0.05);
+  /* kept alias so old refs still compile */
+  .glass-purple { @apply glass-violet; }
+
+  .glow-border-blue {
+    border: 1px solid rgba(79, 110, 242, 0.28);
+    box-shadow: 0 0 14px rgba(79,110,242,0.18), inset 0 0 14px rgba(79,110,242,0.04);
   }
 
-  .glow-border-purple {
-    border: 1px solid rgba(124, 58, 237, 0.3);
-    box-shadow: 0 0 15px rgba(124, 58, 237, 0.2), inset 0 0 15px rgba(124, 58, 237, 0.05);
+  .glow-border-violet {
+    border: 1px solid rgba(124, 106, 247, 0.28);
+    box-shadow: 0 0 14px rgba(124,106,247,0.18), inset 0 0 14px rgba(124,106,247,0.04);
   }
 
-  .neon-text-cyan {
-    color: var(--color-cyan);
-    text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.4);
+  /* Legacy aliases */
+  .glow-border-cyan   { @apply glow-border-blue; }
+  .glow-border-purple { @apply glow-border-violet; }
+
+  .neon-text-blue {
+    color: var(--color-blue-light);
+    text-shadow: 0 0 10px rgba(79,110,242,0.6), 0 0 20px rgba(79,110,242,0.3);
   }
 
-  .neon-text-purple {
-    color: var(--color-purple-light);
-    text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(168, 85, 247, 0.4);
+  .neon-text-violet {
+    color: var(--color-violet-light);
+    text-shadow: 0 0 10px rgba(124,106,247,0.6), 0 0 20px rgba(124,106,247,0.3);
   }
 
+  /* Legacy aliases */
+  .neon-text-cyan   { @apply neon-text-blue; }
+  .neon-text-purple { @apply neon-text-violet; }
+
+  /* Gradient text — professional indigo → violet */
   .gradient-text {
-    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple-light), var(--color-pink));
+    background: linear-gradient(135deg, var(--color-blue-light), var(--color-violet-light));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .gradient-text-cyan {
-    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    background: linear-gradient(135deg, var(--color-blue), var(--color-blue-dark));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -119,7 +132,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 2rem;
-    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+    background: linear-gradient(135deg, var(--color-blue), var(--color-violet));
     border-radius: 50px;
     font-family: var(--font-heading);
     font-weight: 600;
@@ -127,19 +140,19 @@ body {
     border: none;
     overflow: hidden;
     transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 20px rgba(79,110,242,0.35);
   }
 
   .btn-glow:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 0 60px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 0 35px rgba(79,110,242,0.55), 0 0 55px rgba(124,106,247,0.3);
   }
 
   .btn-glow::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    background: linear-gradient(135deg, rgba(255,255,255,0.12), transparent);
     border-radius: 50px;
   }
 }
@@ -159,7 +172,7 @@ section {
 
 /* ─── Selection Color ─────────────────────────────────────────── */
 ::selection {
-  background: rgba(0, 212, 255, 0.3);
+  background: rgba(79, 110, 242, 0.3);
   color: #fff;
 }
 
@@ -170,16 +183,20 @@ section {
 
 @keyframes pageIn {
   from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ─── Neural Net Canvas ──────────────────────────────────────── */
 #particle-canvas {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   z-index: 0;
   pointer-events: none;
+}
+
+/* ─── Modal Portal (always on top) ──────────────────────────── */
+#modal-root {
+  position: fixed;
+  z-index: 9999;
 }

@@ -9,9 +9,9 @@ export default function GlowButton({ children, onClick, href, className = '', va
   const { ref, x, y, onMouseMove, onMouseLeave } = useMagneticEffect(0.35);
 
   const gradients = {
-    cyan: 'linear-gradient(135deg, #00d4ff, #0099cc)',
-    purple: 'linear-gradient(135deg, #7c3aed, #a855f7)',
-    mixed: 'linear-gradient(135deg, #00d4ff, #7c3aed, #a855f7)',
+    cyan: 'linear-gradient(135deg, #4f6ef2, #3451c7)',
+    purple: 'linear-gradient(135deg, #7c6af7, #7c6af7)',
+    mixed: 'linear-gradient(135deg, #4f6ef2, #7c6af7, #7c6af7)',
   };
 
   const glows = {

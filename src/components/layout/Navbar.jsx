@@ -47,7 +47,7 @@ export default function Navbar() {
           onClick={(e) => { e.preventDefault(); handleNavClick('#hero'); }}
           className="font-heading font-bold text-xl"
           style={{
-            background: 'linear-gradient(135deg, #00d4ff, #a855f7)',
+            background: 'linear-gradient(135deg, #4f6ef2, #7c6af7)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
@@ -74,7 +74,7 @@ export default function Navbar() {
                 {link.label}
                 <span
                   className="absolute -bottom-1 left-0 h-px w-0 group-hover:w-full transition-all duration-300"
-                  style={{ background: 'linear-gradient(90deg, #00d4ff, #a855f7)' }}
+                  style={{ background: 'linear-gradient(90deg, #4f6ef2, #7c6af7)' }}
                 />
               </a>
             </MagneticWrapper>
@@ -127,7 +127,7 @@ export default function Navbar() {
               opacity: mobileOpen && i === 1 ? 0 : 1,
             }}
             className="block h-0.5 w-6"
-            style={{ background: '#00d4ff' }}
+            style={{ background: '#4f6ef2' }}
           />
         ))}
       </button>

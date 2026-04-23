@@ -23,11 +23,11 @@ export default function Projects() {
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div
           className="absolute left-1/4 top-0 w-96 h-96 rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%)', filter: 'blur(60px)' }}
+          style={{ background: 'radial-gradient(circle, rgba(79,110,242,0.06) 0%, transparent 70%)', filter: 'blur(60px)' }}
         />
         <div
           className="absolute right-1/4 bottom-0 w-96 h-96 rounded-full"
-          style={{ background: 'radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)', filter: 'blur(60px)' }}
+          style={{ background: 'radial-gradient(circle, rgba(124,106,247,0.06) 0%, transparent 70%)', filter: 'blur(60px)' }}
         />
       </div>
 

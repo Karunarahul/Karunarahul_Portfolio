@@ -11,7 +11,7 @@ export default function FloatingCard({
   delay = 0,
   duration = 4,
   tiltStrength = 15,
-  glowColor = 'cyan',
+  glowColor = 'blue',
   style = {},
 }) {
   const cardRef = useRef(null);
@@ -34,9 +34,10 @@ export default function FloatingCard({
   }, []);
 
   const glowStyles = {
-    cyan: '0 0 20px rgba(0,212,255,0.3), 0 0 40px rgba(0,212,255,0.1)',
-    purple: '0 0 20px rgba(124,58,237,0.3), 0 0 40px rgba(124,58,237,0.1)',
-    pink: '0 0 20px rgba(240,171,252,0.3)',
+    blue: '0 0 20px rgba(79,110,242,0.3), 0 0 40px rgba(79,110,242,0.1)',
+    violet: '0 0 20px rgba(124,106,247,0.3), 0 0 40px rgba(124,106,247,0.1)',
+    cyan: '0 0 20px rgba(79,110,242,0.3), 0 0 40px rgba(79,110,242,0.1)', // fallback
+    purple: '0 0 20px rgba(124,106,247,0.3), 0 0 40px rgba(124,106,247,0.1)', // fallback
   };
 
   return (

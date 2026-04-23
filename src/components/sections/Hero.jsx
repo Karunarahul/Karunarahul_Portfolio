@@ -13,12 +13,12 @@ const TITLES = [
 ];
 
 const floatingIcons = [
-  { Icon: Wifi, x: '10%', y: '25%', delay: 0, size: 28, color: '#00d4ff' },
-  { Icon: Cpu, x: '85%', y: '20%', delay: 0.8, size: 32, color: '#a855f7' },
-  { Icon: Zap, x: '8%', y: '65%', delay: 1.6, size: 24, color: '#f0abfc' },
-  { Icon: Radio, x: '88%', y: '60%', delay: 0.4, size: 30, color: '#00d4ff' },
+  { Icon: Wifi, x: '10%', y: '25%', delay: 0, size: 28, color: '#4f6ef2' },
+  { Icon: Cpu, x: '85%', y: '20%', delay: 0.8, size: 32, color: '#7c6af7' },
+  { Icon: Zap, x: '8%', y: '65%', delay: 1.6, size: 24, color: '#7b93f5' },
+  { Icon: Radio, x: '88%', y: '60%', delay: 0.4, size: 30, color: '#4f6ef2' },
   { Icon: Globe, x: '15%', y: '45%', delay: 1.2, size: 22, color: '#22c55e' },
-  { Icon: Activity, x: '80%', y: '40%', delay: 2, size: 26, color: '#a855f7' },
+  { Icon: Activity, x: '80%', y: '40%', delay: 2, size: 26, color: '#7c6af7' },
 ];
 
 export default function Hero() {
@@ -90,7 +90,7 @@ export default function Hero() {
           style={{
             background: 'rgba(0,212,255,0.08)',
             border: '1px solid rgba(0,212,255,0.25)',
-            color: '#00d4ff',
+            color: '#4f6ef2',
           }}
         >
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
@@ -108,7 +108,7 @@ export default function Hero() {
           <span
             className="block"
             style={{
-              background: 'linear-gradient(135deg, #00d4ff 0%, #a855f7 50%, #f0abfc 100%)',
+              background: 'linear-gradient(135deg, #4f6ef2 0%, #7c6af7 50%, #7b93f5 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -125,9 +125,9 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.9 }}
           className="flex items-center justify-center gap-2 mb-6"
         >
-          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, transparent, #00d4ff)' }} />
+          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, transparent, #4f6ef2)' }} />
           <span className="text-sm font-body text-gray-400 uppercase tracking-widest">ECE Engineer</span>
-          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, #7c3aed, transparent)' }} />
+          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, #7c6af7, transparent)' }} />
         </motion.div>
 
         {/* Typewriter */}
@@ -136,7 +136,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 1 }}
           className="text-xl md:text-2xl font-heading font-semibold mb-10 h-8"
-          style={{ color: '#00d4ff' }}
+          style={{ color: '#4f6ef2' }}
         >
           {displayed}
           <span className="animate-pulse ml-0.5">|</span>

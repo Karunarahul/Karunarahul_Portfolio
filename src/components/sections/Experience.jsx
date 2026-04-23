@@ -17,7 +17,7 @@ export default function Experience() {
           {/* Center line */}
           <div
             className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px hidden md:block"
-            style={{ background: 'linear-gradient(to bottom, #00d4ff, #7c3aed, transparent)' }}
+            style={{ background: 'linear-gradient(to bottom, #4f6ef2, #7c6af7, transparent)' }}
           />
 
           {experience.map((item, i) => (

@@ -9,7 +9,7 @@ import { useScrollAnimation } from '../../hooks/useScrollAnimation';
 const socials = [
   { Icon: FaGithub, label: 'GitHub', href: 'https://github.com/Karunarahul', color: '#fff' },
   { Icon: FaLinkedinIn, label: 'LinkedIn', href: 'https://linkedin.com/in/karuna-rahul-mamidi', color: '#0ea5e9' },
-  { Icon: FaTwitter, label: 'Twitter', href: 'https://twitter.com/', color: '#00d4ff' },
+  { Icon: FaTwitter, label: 'Twitter', href: 'https://twitter.com/', color: '#4f6ef2' },
 ];
 
 const contactInfo = [
@@ -77,7 +77,7 @@ export default function Contact() {
                       className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
                       style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)' }}
                     >
-                      <Icon size={18} style={{ color: '#00d4ff' }} />
+                      <Icon size={18} style={{ color: '#4f6ef2' }} />
                     </div>
                     <div>
                       <p className="text-xs text-gray-500 font-body">{label}</p>

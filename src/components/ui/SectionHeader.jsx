@@ -24,7 +24,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         style={{
           background: 'rgba(0,212,255,0.1)',
           border: '1px solid rgba(0,212,255,0.4)',
-          color: '#00d4ff',
+          color: '#4f6ef2',
         }}
       >
         {label}
@@ -38,7 +38,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         transition={{ duration: 0.7, delay: 0.1 }}
         className="text-4xl md:text-5xl font-heading font-bold mb-4"
         style={{
-          background: 'linear-gradient(135deg, #ffffff, #00d4ff, #a855f7)',
+          background: 'linear-gradient(135deg, #ffffff, #4f6ef2, #7c6af7)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -55,7 +55,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         transition={{ duration: 0.8, delay: 0.2 }}
         className="h-px w-24 mb-4"
         style={{
-          background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
+          background: 'linear-gradient(90deg, #4f6ef2, #7c6af7)',
           transformOrigin: align === 'center' ? 'center' : 'left',
         }}
       />

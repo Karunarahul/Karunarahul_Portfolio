@@ -6,7 +6,7 @@ export const experience = [
     period: '2023 – Present',
     description: 'Leading the ECE student body of 800+ members, organizing technical events, industry connects, and research initiatives across the department.',
     highlights: ['Organized 12+ technical workshops', 'Led team of 40 core members', 'Established industry partnerships'],
-    color: '#00d4ff',
+    color: '#4f6ef2',
     side: 'left',
   },
   {
@@ -16,7 +16,7 @@ export const experience = [
     period: '2022 – 2023',
     description: 'Co-organized the Circuit Engineering Association annual tech fest, coordinating events across robotics, IoT, and embedded systems domains.',
     highlights: ['Coordinated 5 major events', '500+ student participants', 'Guest lecture series management'],
-    color: '#a855f7',
+    color: '#7c6af7',
     side: 'right',
   },
 ];
@@ -27,7 +27,7 @@ export const certifications = [
     name: 'Ham Radio License',
     org: 'ARRL / WPC India',
     icon: '📡',
-    color: '#00d4ff',
+    color: '#4f6ef2',
     description: 'Amateur Radio Operator License enabling shortwave, VHF, and satellite communication.',
   },
   {
@@ -35,7 +35,7 @@ export const certifications = [
     name: 'Microchip IoT',
     org: 'Microchip Technology',
     icon: '🔌',
-    color: '#a855f7',
+    color: '#7c6af7',
     description: 'Certified in Microchip IoT development ecosystem including AVR and PIC microcontrollers.',
   },
   {
@@ -43,7 +43,7 @@ export const certifications = [
     name: 'Embedded Systems',
     org: 'Tessolve Semiconductor',
     icon: '⚙️',
-    color: '#f0abfc',
+    color: '#7b93f5',
     description: 'Professional certification in embedded systems design, RTOS, and hardware-software integration.',
   },
   {

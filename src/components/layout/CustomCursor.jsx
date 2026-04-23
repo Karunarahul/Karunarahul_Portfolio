@@ -105,8 +105,8 @@ export default function CustomCursor() {
           width: 10,
           height: 10,
           borderRadius: '50%',
-          background: '#00d4ff',
-          boxShadow: '0 0 10px #00d4ff, 0 0 20px rgba(0,212,255,0.5)',
+          background: '#4f6ef2',
+          boxShadow: '0 0 10px #4f6ef2, 0 0 20px rgba(0,212,255,0.5)',
         }}
       />
       {/* Ring */}

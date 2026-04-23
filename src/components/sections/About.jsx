@@ -9,14 +9,14 @@ const highlights = [
     Icon: Wifi,
     title: 'IoT Systems',
     desc: 'Designing end-to-end IoT architectures with MQTT, edge computing, and cloud integration.',
-    color: '#00d4ff',
+    color: '#4f6ef2',
     delay: 0,
   },
   {
     Icon: Cpu,
     title: 'Embedded Systems',
     desc: 'Low-level programming on ESP32, Raspberry Pi, AVR — from bare metal to RTOS.',
-    color: '#a855f7',
+    color: '#7c6af7',
     delay: 0.3,
   },
   {
@@ -63,7 +63,7 @@ export default function About() {
           {/* Text */}
           <div ref={textRef}>
             <p className="text-gray-300 text-lg leading-relaxed mb-6 font-body">
-              I'm <span style={{ color: '#00d4ff', fontWeight: 600 }}>Mamidi Karuna Rahul</span>, a final-year
+              I'm <span style={{ color: '#4f6ef2', fontWeight: 600 }}>Mamidi Karuna Rahul</span>, a final-year
               Electronics and Communication Engineering student at KL University with a deep passion for
               building intelligent, connected systems that bridge the physical and digital worlds.
             </p>
@@ -89,7 +89,7 @@ export default function About() {
                   className="text-center p-4 rounded-xl glass"
                   style={{ border: '1px solid rgba(0,212,255,0.1)' }}
                 >
-                  <p className="text-2xl font-heading font-bold" style={{ color: '#00d4ff' }}>{stat.value}</p>
+                  <p className="text-2xl font-heading font-bold" style={{ color: '#4f6ef2' }}>{stat.value}</p>
                   <p className="text-xs text-gray-500 font-body mt-1">{stat.label}</p>
                 </div>
               ))}
@@ -99,7 +99,7 @@ export default function About() {
           {/* Highlight Cards */}
           <div className="grid grid-cols-2 gap-4">
             {highlights.map(({ Icon, title, desc, color, delay }, i) => (
-              <FloatingCard key={title} delay={delay} duration={4 + i * 0.4} glowColor={color === '#00d4ff' ? 'cyan' : 'purple'}>
+              <FloatingCard key={title} delay={delay} duration={4 + i * 0.4} glowColor={color === '#4f6ef2' ? 'blue' : 'violet'}>
                 <div
                   className="p-5 rounded-xl h-full glass"
                   style={{ border: `1px solid ${color}22` }}

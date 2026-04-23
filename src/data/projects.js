@@ -16,8 +16,8 @@ export const projects = [
       'Cloud-synchronized twin state with sub-second latency',
     ],
     stack: ['Python', 'Raspberry Pi', 'MQTT', 'Unreal Engine 5', 'Node.js', 'TensorFlow Lite'],
-    color: '#00d4ff',
-    gradient: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(10,22,40,0.9))',
+    color: '#4f6ef2',
+    gradient: 'linear-gradient(135deg, rgba(79,110,242,0.15), rgba(7,9,15,0.9))',
   },
   {
     id: 2,
@@ -36,8 +36,8 @@ export const projects = [
       'Encrypted end-to-end telemetry pipeline',
     ],
     stack: ['Embedded C', 'ESP32', 'B5G SDK', 'Python', 'AWS IoT', 'MQTT over 5G'],
-    color: '#a855f7',
-    gradient: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(10,22,40,0.9))',
+    color: '#7c6af7',
+    gradient: 'linear-gradient(135deg, rgba(124,106,247,0.15), rgba(7,9,15,0.9))',
   },
   {
     id: 3,
@@ -56,7 +56,7 @@ export const projects = [
       'Urban channel model generation for network planning',
     ],
     stack: ['Python', 'Sionna', 'TensorFlow', 'NumPy', 'Matplotlib', 'Blender'],
-    color: '#f0abfc',
-    gradient: 'linear-gradient(135deg, rgba(240,171,252,0.12), rgba(10,22,40,0.9))',
+    color: '#7b93f5',
+    gradient: 'linear-gradient(135deg, rgba(123,147,245,0.12), rgba(7,9,15,0.9))',
   },
 ];

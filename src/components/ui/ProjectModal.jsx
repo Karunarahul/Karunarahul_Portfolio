@@ -1,5 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ExternalLink, Cpu, Wifi, Activity, Radio } from 'lucide-react';
+import { X, Cpu, Activity, Radio } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { useEffect, useState } from 'react';
 
 const iconMap = {
   'Digital Twin': Cpu,
@@ -8,19 +10,32 @@ const iconMap = {
 };
 
 export default function ProjectModal({ project, onClose }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // Prevent scrolling when modal is open
+    if (project) {
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [project]);
+
   if (!project) return null;
 
   const Icon = iconMap[project.shortTitle] || Cpu;
 
-  return (
+  const modalContent = (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
         onClick={onClose}
-        style={{ background: 'rgba(2,8,23,0.85)', backdropFilter: 'blur(10px)' }}
+        style={{ background: 'rgba(7,9,15,0.85)', backdropFilter: 'blur(10px)' }}
       >
         <motion.div
           layoutId={`project-${project.id}`}
@@ -30,14 +45,14 @@ export default function ProjectModal({ project, onClose }) {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           onClick={(e) => e.stopPropagation()}
           className="glass rounded-2xl p-8 max-w-2xl w-full relative overflow-hidden"
-          style={{ border: '1px solid rgba(0,212,255,0.3)', maxHeight: '85vh', overflowY: 'auto' }}
+          style={{ border: '1px solid rgba(79,110,242,0.3)', maxHeight: '85vh', overflowY: 'auto' }}
         >
           {/* Close */}
           <motion.button
             whileHover={{ scale: 1.1, rotate: 90 }}
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full glass-purple text-gray-300 hover:text-white transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full glass-violet text-gray-300 hover:text-white transition-colors"
           >
             <X size={20} />
           </motion.button>
@@ -45,17 +60,17 @@ export default function ProjectModal({ project, onClose }) {
           {/* Glow accent */}
           <div
             className="absolute top-0 right-0 w-64 h-64 rounded-full pointer-events-none opacity-10"
-            style={{ background: 'radial-gradient(circle, #00d4ff, transparent)', transform: 'translate(30%, -30%)' }}
+            style={{ background: 'radial-gradient(circle, var(--color-blue), transparent)', transform: 'translate(30%, -30%)' }}
           />
 
           {/* Icon */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="p-4 rounded-xl glass-purple" style={{ boxShadow: '0 0 20px rgba(0,212,255,0.2)' }}>
-              <Icon size={32} style={{ color: '#00d4ff' }} />
+            <div className="p-4 rounded-xl glass-violet" style={{ boxShadow: '0 0 20px rgba(79,110,242,0.2)' }}>
+              <Icon size={32} style={{ color: 'var(--color-blue)' }} />
             </div>
             <div>
               <h2 className="text-2xl font-heading font-bold text-white">{project.title}</h2>
-              <p className="text-sm" style={{ color: '#00d4ff' }}>{project.subtitle}</p>
+              <p className="text-sm" style={{ color: 'var(--color-blue)' }}>{project.subtitle}</p>
             </div>
           </div>
 
@@ -66,9 +81,9 @@ export default function ProjectModal({ project, onClose }) {
                 key={tag}
                 className="px-3 py-1 text-xs rounded-full font-medium"
                 style={{
-                  background: 'rgba(0,212,255,0.1)',
-                  border: '1px solid rgba(0,212,255,0.3)',
-                  color: '#00d4ff',
+                  background: 'rgba(79,110,242,0.1)',
+                  border: '1px solid rgba(79,110,242,0.3)',
+                  color: 'var(--color-blue-light)',
                 }}
               >
                 {tag}
@@ -91,7 +106,7 @@ export default function ProjectModal({ project, onClose }) {
                   transition={{ delay: i * 0.08 }}
                   className="flex items-start gap-3 text-gray-300"
                 >
-                  <span style={{ color: '#00d4ff', marginTop: 3 }}>▹</span>
+                  <span style={{ color: 'var(--color-blue)', marginTop: 3 }}>▹</span>
                   {f}
                 </motion.li>
               ))}
@@ -107,9 +122,9 @@ export default function ProjectModal({ project, onClose }) {
                   key={s}
                   className="px-3 py-1 text-xs rounded-full font-medium"
                   style={{
-                    background: 'rgba(124,58,237,0.15)',
-                    border: '1px solid rgba(124,58,237,0.3)',
-                    color: '#a855f7',
+                    background: 'rgba(124,106,247,0.15)',
+                    border: '1px solid rgba(124,106,247,0.3)',
+                    color: 'var(--color-violet-light)',
                   }}
                 >
                   {s}
@@ -121,4 +136,8 @@ export default function ProjectModal({ project, onClose }) {
       </motion.div>
     </AnimatePresence>
   );
+
+  if (!mounted) return null;
+
+  return createPortal(modalContent, document.getElementById('modal-root'));
 }
