@@ -3,6 +3,6 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/Karunarahul_Portfolio/', // GitHub Pages base path
+  base: process.env.DEPLOY_TARGET === 'gh-pages' ? '/Karunarahul_Portfolio/' : '/',
   plugins: [react()],
 })
