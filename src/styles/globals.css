@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────── */
+:root {
+  --color-bg: #020817;
+  --color-navy: #0a1628;
+  --color-navy-light: #0f2040;
+  --color-cyan: #00d4ff;
+  --color-cyan-dark: #0099cc;
+  --color-purple: #7c3aed;
+  --color-purple-light: #a855f7;
+  --color-pink: #f0abfc;
+  --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 40px rgba(0, 212, 255, 0.2);
+  --glow-purple: 0 0 20px rgba(124, 58, 237, 0.5), 0 0 40px rgba(124, 58, 237, 0.2);
+  --glow-pink: 0 0 20px rgba(240, 171, 252, 0.5);
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: #e2e8f0;
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Hide default cursor everywhere */
+*, a, button, [role="button"] {
+  cursor: none !important;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, var(--color-cyan), var(--color-purple));
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-cyan);
+}
+
+/* ─── Glassmorphism Utility ──────────────────────────────────── */
+@layer components {
+  .glass {
+    @apply backdrop-blur-md;
+    background: rgba(10, 22, 40, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-purple {
+    @apply backdrop-blur-md;
+    background: rgba(15, 10, 40, 0.6);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glow-border-cyan {
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2), inset 0 0 15px rgba(0, 212, 255, 0.05);
+  }
+
+  .glow-border-purple {
+    border: 1px solid rgba(124, 58, 237, 0.3);
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0.2), inset 0 0 15px rgba(124, 58, 237, 0.05);
+  }
+
+  .neon-text-cyan {
+    color: var(--color-cyan);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.8), 0 0 20px rgba(0, 212, 255, 0.4);
+  }
+
+  .neon-text-purple {
+    color: var(--color-purple-light);
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.8), 0 0 20px rgba(168, 85, 247, 0.4);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple-light), var(--color-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .gradient-text-cyan {
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-container {
+    @apply max-w-7xl mx-auto px-6 lg:px-12;
+  }
+
+  .btn-glow {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--color-cyan), var(--color-purple));
+    border-radius: 50px;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: white;
+    border: none;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  }
+
+  .btn-glow:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), 0 0 60px rgba(124, 58, 237, 0.4);
+  }
+
+  .btn-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    border-radius: 50px;
+  }
+}
+
+/* ─── Section spacing ────────────────────────────────────────── */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Floating animation stagger helpers ─────────────────────── */
+.float-delay-0 { animation-delay: 0s; }
+.float-delay-1 { animation-delay: 0.5s; }
+.float-delay-2 { animation-delay: 1s; }
+.float-delay-3 { animation-delay: 1.5s; }
+.float-delay-4 { animation-delay: 2s; }
+
+/* ─── Selection Color ─────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 212, 255, 0.3);
+  color: #fff;
+}
+
+/* ─── Smooth transitions ─────────────────────────────────────── */
+.page-transition {
+  animation: pageIn 0.5s ease forwards;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Neural Net Canvas ──────────────────────────────────────── */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}

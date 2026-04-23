@@ -1,0 +1,62 @@
+export const projects = [
+  {
+    id: 1,
+    shortTitle: 'Digital Twin',
+    title: 'Digital Twin Healthcare System',
+    subtitle: 'IoT + Raspberry Pi + Unreal Engine VR Visualization',
+    description: 'A real-time digital twin of a hospital patient environment, streaming live biometric data into an interactive 3D Unreal Engine simulation.',
+    longDescription:
+      'This system creates a real-time digital replica of a patient\'s physiological state and hospital environment. IoT sensors (SpO2, ECG, temperature) stream data via MQTT to a Raspberry Pi gateway, which feeds a cloud-hosted digital twin model. The twin is visualized in Unreal Engine 5 as an immersive VR environment, enabling remote medical monitoring and predictive analytics for healthcare practitioners.',
+    tags: ['IoT', 'Raspberry Pi', 'Digital Twin', 'VR', 'Healthcare'],
+    features: [
+      'Real-time biometric streaming via MQTT protocol',
+      'Raspberry Pi acting as edge-compute gateway',
+      'Unreal Engine 5 VR environment for immersive visualization',
+      'Predictive anomaly detection using ML models',
+      'Cloud-synchronized twin state with sub-second latency',
+    ],
+    stack: ['Python', 'Raspberry Pi', 'MQTT', 'Unreal Engine 5', 'Node.js', 'TensorFlow Lite'],
+    color: '#00d4ff',
+    gradient: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(10,22,40,0.9))',
+  },
+  {
+    id: 2,
+    shortTitle: 'SOS Wearable',
+    title: 'SOS Wearable Healthcare System',
+    subtitle: 'B5G Network Emergency Response Platform',
+    description: 'A wearable emergency response system leveraging Beyond 5G networks for ultra-low latency SOS alerts and real-time vitals transmission.',
+    longDescription:
+      'This wearable device continuously monitors the wearer\'s vital signs and physical state. Upon detecting a critical event (fall, cardiac anomaly, panic button), it transmits an encrypted SOS payload over a B5G slice-based network to a cloud response center and nearest hospital. The system achieves sub-10ms alert latency using network slicing and edge computing, making it ideal for elderly care and high-risk environments.',
+    tags: ['B5G', '5G', 'Wearable', 'Emergency Response', 'Edge Computing'],
+    features: [
+      'Ultra-low latency SOS alerts via 5G network slicing',
+      'Continuous heart rate, SpO2, and motion monitoring',
+      'GPS-integrated location broadcasting on emergency',
+      'Edge AI for on-device anomaly pre-screening',
+      'Encrypted end-to-end telemetry pipeline',
+    ],
+    stack: ['Embedded C', 'ESP32', 'B5G SDK', 'Python', 'AWS IoT', 'MQTT over 5G'],
+    color: '#a855f7',
+    gradient: 'linear-gradient(135deg, rgba(124,58,237,0.15), rgba(10,22,40,0.9))',
+  },
+  {
+    id: 3,
+    shortTitle: '5G Ray Tracing',
+    title: '5G Signal Rendering & Ray Tracing',
+    subtitle: 'Sionna RT Simulation + Python Visualization',
+    description: 'A physically-accurate 5G signal propagation simulator using ray-tracing algorithms, visualizing mmWave signal behavior in complex 3D environments.',
+    longDescription:
+      'Leveraging NVIDIA\'s Sionna ray-tracing engine, this project simulates 5G mmWave signal propagation through realistic 3D urban environments. The system models reflection, diffraction, and scattering of radio waves off surfaces, producing high-fidelity channel impulse responses. Results are visualized with custom Python rendering pipelines showing signal strength heatmaps, multipath clusters, and MIMO beam patterns.',
+    tags: ['5G', 'mmWave', 'Ray Tracing', 'Sionna', 'RF Simulation'],
+    features: [
+      'Physically-accurate ray tracing via Sionna RT engine',
+      'mmWave propagation with reflection, diffraction, scattering',
+      'Custom Python-based 3D visualization pipeline',
+      'MIMO beamforming pattern analysis',
+      'Urban channel model generation for network planning',
+    ],
+    stack: ['Python', 'Sionna', 'TensorFlow', 'NumPy', 'Matplotlib', 'Blender'],
+    color: '#f0abfc',
+    gradient: 'linear-gradient(135deg, rgba(240,171,252,0.12), rgba(10,22,40,0.9))',
+  },
+];
