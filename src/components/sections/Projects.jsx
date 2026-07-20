@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, X } from 'lucide-react';
 import { projects } from '../../data/projects';
+import { CardSpotlight } from '../ui/CardSpotlight';
+import { Button } from '../ui/Button';
 
 function InView({ children, delay = 0, className = '' }) {
   const ref    = useRef(null);
@@ -48,7 +50,7 @@ function Drawer({ project, onClose }) {
       >
         {/* Header */}
         <div
-          className="sticky top-0 flex items-center justify-between px-8 py-5"
+          className="sticky top-0 flex items-center justify-between px-8 py-5 z-10"
           style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border-soft)' }}
         >
           <span className="label">{project.index} / {String(projects.length).padStart(2, '0')}</span>
@@ -65,7 +67,7 @@ function Drawer({ project, onClose }) {
         </div>
 
         {/* Content */}
-        <div className="px-8 py-8 space-y-8">
+        <div className="px-8 py-8 space-y-8 relative z-0">
           <div>
             <p className="text-xs font-medium mb-2" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>
               {project.year} · {project.subtitle}
@@ -77,6 +79,14 @@ function Drawer({ project, onClose }) {
               {project.title}
             </h2>
             <p className="body-md">{project.description}</p>
+            
+            {project.title === 'SafeVitals XR' && (
+              <div className="mt-6">
+                <Button href="https://www.safevitals.in" target="_blank" rel="noopener noreferrer">
+                  Click here
+                </Button>
+              </div>
+            )}
           </div>
 
           <div className="divider" />
@@ -137,11 +147,10 @@ function Drawer({ project, onClose }) {
   );
 }
 
-// ── Single Project Row ─────────────────────────────────────────
-function ProjectRow({ project, index, onOpen }) {
+// ── Single Project Card ─────────────────────────────────────────
+function ProjectCard({ project, index, onOpen }) {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
-  const isFirst = index === 0;
 
   return (
     <motion.div
@@ -149,63 +158,26 @@ function ProjectRow({ project, index, onOpen }) {
       initial={{ opacity: 0, y: 32 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, delay: index * 0.07, ease: [0.22, 1, 0.36, 1] }}
+      className="h-full"
     >
-      <motion.article
-        className="group cursor-pointer"
+      <CardSpotlight
+        className="group cursor-pointer h-full p-6 sm:p-8 flex flex-col"
         onClick={() => onOpen(project)}
-        style={{ borderTop: '1px solid var(--border-soft)' }}
         role="button"
         tabIndex={0}
         aria-label={`Open case study: ${project.title}`}
         onKeyDown={e => e.key === 'Enter' && onOpen(project)}
       >
-        <div className="py-8 grid sm:grid-cols-[auto_1fr_auto] gap-6 items-center">
-
-          {/* Index */}
+        <div className="flex justify-between items-start mb-12">
           <span
-            className="hidden sm:block text-xs font-semibold tabular-nums"
-            style={{ color: 'var(--border)', fontFamily: 'var(--font-body)', letterSpacing: '0.05em', minWidth: '2rem' }}
+            className="text-xs font-semibold tabular-nums"
+            style={{ color: 'var(--border)', fontFamily: 'var(--font-body)', letterSpacing: '0.05em' }}
             aria-hidden="true"
           >
             {project.index}
           </span>
-
-          {/* Content */}
-          <div>
-            <h3
-              className="text-lg font-bold mb-1 transition-all duration-200 group-hover:translate-x-1"
-              style={{
-                color: 'var(--primary)',
-                fontFamily: 'var(--font-display)',
-                letterSpacing: '-0.03em',
-              }}
-            >
-              {project.title}
-            </h3>
-            <p className="text-sm mb-3" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>
-              {project.subtitle}
-            </p>
-            <div className="flex flex-wrap gap-1.5">
-              {project.tags.slice(0, 4).map(tag => (
-                <span
-                  key={tag}
-                  className="text-[11px] px-2.5 py-0.5 rounded-full"
-                  style={{
-                    background: 'rgba(10,10,10,0.05)',
-                    border: '1px solid var(--border-soft)',
-                    color: 'var(--muted)',
-                    fontFamily: 'var(--font-body)',
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Arrow */}
           <div
-            className="flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100"
+            className="w-9 h-9 rounded-lg flex items-center justify-center transition-all duration-300 opacity-0 group-hover:opacity-100"
             style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
             aria-hidden="true"
           >
@@ -216,7 +188,39 @@ function ProjectRow({ project, index, onOpen }) {
             />
           </div>
         </div>
-      </motion.article>
+
+        <div className="mt-auto">
+          <h3
+            className="text-xl font-bold mb-2 transition-all duration-200"
+            style={{
+              color: 'var(--primary)',
+              fontFamily: 'var(--font-display)',
+              letterSpacing: '-0.03em',
+            }}
+          >
+            {project.title}
+          </h3>
+          <p className="text-sm mb-6" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>
+            {project.subtitle}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {project.tags.slice(0, 3).map(tag => (
+              <span
+                key={tag}
+                className="text-[11px] px-2.5 py-0.5 rounded-full"
+                style={{
+                  background: 'rgba(10,10,10,0.05)',
+                  border: '1px solid var(--border-soft)',
+                  color: 'var(--muted)',
+                  fontFamily: 'var(--font-body)',
+                }}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </CardSpotlight>
     </motion.div>
   );
 }
@@ -245,16 +249,15 @@ export default function Projects() {
         </div>
 
         {/* Project list */}
-        <div>
+        <div className="grid sm:grid-cols-2 gap-4 lg:gap-6">
           {projects.map((project, i) => (
-            <ProjectRow
+            <ProjectCard
               key={project.id}
               project={project}
               index={i}
               onOpen={setSelected}
             />
           ))}
-          <div className="divider" />
         </div>
 
       </div>
