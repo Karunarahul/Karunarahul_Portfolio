@@ -1,132 +1,60 @@
-import { useEffect, useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion, useMotionValue } from 'framer-motion';
 
 export default function CustomCursor() {
-  const cursorX = useMotionValue(-100);
-  const cursorY = useMotionValue(-100);
+  if (typeof window !== 'undefined') {
+    if (
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
+      return null;
+    }
+  }
+  return <CursorImpl />;
+}
 
-  const springConfig = { damping: 25, stiffness: 200 };
-  const ringX = useSpring(cursorX, { damping: 18, stiffness: 100 });
-  const ringY = useSpring(cursorY, { damping: 18, stiffness: 100 });
-
-  const isHovering = useRef(false);
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const trailsRef = useRef([]);
-  const trailPositions = useRef([]);
-  const animFrameRef = useRef(null);
+function CursorImpl() {
+  const x = useMotionValue(-100);
+  const y = useMotionValue(-100);
 
   useEffect(() => {
-    const MAX_TRAILS = 8;
-    // Create trail elements
-    trailsRef.current = Array.from({ length: MAX_TRAILS }, (_, i) => {
-      const el = document.createElement('div');
-      el.style.cssText = `
-        position: fixed;
-        width: ${8 - i}px;
-        height: ${8 - i}px;
-        border-radius: 50%;
-        background: rgba(79, 110, 242, ${0.6 - i * 0.07});
-        pointer-events: none;
-        z-index: 999998;
-        transform: translate(-50%, -50%);
-        filter: blur(${i * 0.5}px);
-        transition: none;
-      `;
-      document.body.appendChild(el);
-      return el;
-    });
-
-    trailPositions.current = Array.from({ length: MAX_TRAILS }, () => ({ x: -100, y: -100 }));
-
-    let mouseX = -100, mouseY = -100;
-
-    const onMouseMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-    };
-
-    const animate = () => {
-      // Update trail positions with lag
-      trailPositions.current[0] = { x: mouseX, y: mouseY };
-      for (let i = 1; i < MAX_TRAILS; i++) {
-        const prev = trailPositions.current[i - 1];
-        const curr = trailPositions.current[i];
-        trailPositions.current[i] = {
-          x: curr.x + (prev.x - curr.x) * 0.35,
-          y: curr.y + (prev.y - curr.y) * 0.35,
-        };
-      }
-      trailsRef.current.forEach((el, i) => {
-        const pos = trailPositions.current[i];
-        el.style.left = `${pos.x}px`;
-        el.style.top = `${pos.y}px`;
-      });
-      animFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    const onMouseEnterInteractive = () => {
-      isHovering.current = true;
-    };
-    const onMouseLeaveInteractive = () => {
-      isHovering.current = false;
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.querySelectorAll('a, button, [role="button"], .interactive').forEach((el) => {
-      el.addEventListener('mouseenter', onMouseEnterInteractive);
-      el.addEventListener('mouseleave', onMouseLeaveInteractive);
-    });
-
-    animFrameRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      cancelAnimationFrame(animFrameRef.current);
-      trailsRef.current.forEach((el) => el.remove());
-    };
+    const move = e => { x.set(e.clientX); y.set(e.clientY); };
+    window.addEventListener('mousemove', move, { passive: true });
+    return () => window.removeEventListener('mousemove', move);
   }, []);
 
   return (
-    <>
-      {/* Main dot */}
-      <motion.div
-        ref={dotRef}
-        style={{
-          position: 'fixed',
-          left: cursorX,
-          top: cursorY,
-          x: '-50%',
-          y: '-50%',
-          zIndex: 999999,
-          pointerEvents: 'none',
-          width: 10,
-          height: 10,
-          borderRadius: '50%',
-          background: '#4f6ef2',
-          boxShadow: '0 0 10px #4f6ef2, 0 0 20px rgba(79,110,242,0.5)',
-        }}
-      />
-      {/* Ring */}
-      <motion.div
-        ref={ringRef}
-        style={{
-          position: 'fixed',
-          left: ringX,
-          top: ringY,
-          x: '-50%',
-          y: '-50%',
-          zIndex: 999998,
-          pointerEvents: 'none',
-          width: 36,
-          height: 36,
-          borderRadius: '50%',
-          border: '1.5px solid rgba(79, 110, 242, 0.7)',
-          boxShadow: '0 0 12px rgba(79,110,242,0.3)',
-        }}
-      />
-    </>
+    <motion.div
+      style={{
+        position: 'fixed',
+        left: x, top: y,
+        x: '-3px', y: '-3px',
+        pointerEvents: 'none',
+        zIndex: 999999,
+        willChange: 'transform',
+      }}
+    >
+      <svg width="15" height="15" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(2, 2)">
+          {/* Black border */}
+          <path d="M 2 2 L 16 42 L 24 24 L 42 16 Z" fill="#000" stroke="#000" strokeWidth="6" strokeLinejoin="miter" />
+          
+          {/* White border */}
+          <path d="M 2 2 L 16 42 L 24 24 L 42 16 Z" fill="#FFF" stroke="#FFF" strokeWidth="3" strokeLinejoin="miter" />
+          
+          {/* Gray fill */}
+          <path d="M 2 2 L 16 42 L 24 24 L 42 16 Z" fill="#7C7D82" />
+          
+          {/* White highlight on top-right edge */}
+          <path d="M 14 7 L 24 10.5 M 27 11.5 L 29 12.2 M 31 13 L 32 13.5" stroke="#FFF" strokeWidth="2" />
+          
+          {/* Black shadow on bottom-left edge */}
+          <path d="M 7 14 L 10.5 24 M 11.5 27 L 12.2 29 M 13 31 L 13.5 32" stroke="#000" strokeWidth="2" />
+          
+          {/* Black line from notch */}
+          <path d="M 23 23 L 16 16" stroke="#000" strokeWidth="2.5" strokeLinecap="square" />
+        </g>
+      </svg>
+    </motion.div>
   );
 }

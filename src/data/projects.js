@@ -1,62 +1,74 @@
 export const projects = [
   {
     id: 1,
-    shortTitle: 'Digital Twin',
-    title: 'Digital Twin Healthcare System',
-    subtitle: 'IoT + Raspberry Pi + Unreal Engine VR Visualization',
-    description: 'A real-time digital twin of a hospital patient environment, streaming live biometric data into an interactive 3D Unreal Engine simulation.',
-    longDescription:
-      'This system creates a real-time digital replica of a patient\'s physiological state and hospital environment. IoT sensors (SpO2, ECG, temperature) stream data via MQTT to a Raspberry Pi gateway, which feeds a cloud-hosted digital twin model. The twin is visualized in Unreal Engine 5 as an immersive VR environment, enabling remote medical monitoring and predictive analytics for healthcare practitioners.',
-    tags: ['IoT', 'Raspberry Pi', 'Digital Twin', 'VR', 'Healthcare'],
-    features: [
-      'Real-time biometric streaming via MQTT protocol',
-      'Raspberry Pi acting as edge-compute gateway',
-      'Unreal Engine 5 VR environment for immersive visualization',
-      'Predictive anomaly detection using ML models',
-      'Cloud-synchronized twin state with sub-second latency',
-    ],
-    stack: ['Python', 'Raspberry Pi', 'MQTT', 'Unreal Engine 5', 'Node.js', 'TensorFlow Lite'],
-    color: '#4f6ef2',
-    gradient: 'linear-gradient(135deg, rgba(79,110,242,0.15), rgba(7,9,15,0.9))',
+    index: '01',
+    title: 'SafeVitals XR',
+    subtitle: 'AI-powered remote healthcare monitoring system',
+    year: '2024',
+    description:
+      'An end-to-end system for continuous patient monitoring outside the hospital. Wearable IoT devices capture biometric data — ECG, SpO₂, heart rate, temperature — and transmit it in real-time over 5G to cloud AI models that flag deterioration up to 72 hours in advance. Extended Reality interfaces give clinicians an immersive 3D view of patient status.',
+    problem:
+      'Healthcare is reactive. Patients arrive at hospitals too late. Doctors lack the continuous, intelligent data streams needed to intervene early.',
+    solution:
+      'A continuous monitoring ecosystem that detects anomalies before they become emergencies, bridging the gap between home and hospital care.',
+    outcome:
+      'Two functional hardware prototypes built and tested. Demonstrated to government officials and presented at the MSME Summit. Live ML pipeline validated in lab conditions.',
+    stack: ['Python', 'TensorFlow', 'ESP32', 'FastAPI', 'React', 'Supabase', 'Unreal Engine 5', 'MQTT', '5G'],
+    tags: ['AI/ML', 'IoT', 'Wearables', 'XR', 'Healthcare'],
+    links: { github: null, live: null },
   },
   {
     id: 2,
-    shortTitle: 'SOS Wearable',
-    title: 'SOS Wearable Healthcare System',
-    subtitle: 'B5G Network Emergency Response Platform',
-    description: 'A wearable emergency response system leveraging Beyond 5G networks for ultra-low latency SOS alerts and real-time vitals transmission.',
-    longDescription:
-      'This wearable device continuously monitors the wearer\'s vital signs and physical state. Upon detecting a critical event (fall, cardiac anomaly, panic button), it transmits an encrypted SOS payload over a B5G slice-based network to a cloud response center and nearest hospital. The system achieves sub-10ms alert latency using network slicing and edge computing, making it ideal for elderly care and high-risk environments.',
-    tags: ['B5G', '5G', 'Wearable', 'Emergency Response', 'Edge Computing'],
-    features: [
-      'Ultra-low latency SOS alerts via 5G network slicing',
-      'Continuous heart rate, SpO2, and motion monitoring',
-      'GPS-integrated location broadcasting on emergency',
-      'Edge AI for on-device anomaly pre-screening',
-      'Encrypted end-to-end telemetry pipeline',
-    ],
-    stack: ['Embedded C', 'ESP32', 'B5G SDK', 'Python', 'AWS IoT', 'MQTT over 5G'],
-    color: '#7c6af7',
-    gradient: 'linear-gradient(135deg, rgba(124,106,247,0.15), rgba(7,9,15,0.9))',
+    index: '02',
+    title: 'Digital Twin Healthcare System',
+    subtitle: 'Real-time patient environment simulation using IoT and Unreal Engine',
+    year: '2023',
+    description:
+      'A real-time digital replica of a hospital patient\'s physiological state and environment. IoT sensors stream biometric data via MQTT to a Raspberry Pi gateway, feeding a cloud-hosted digital twin model rendered as an immersive Unreal Engine 5 environment for remote medical monitoring.',
+    problem:
+      'Healthcare practitioners need spatial, intuitive interfaces to understand complex patient environments without being physically present.',
+    solution:
+      'A digital twin that mirrors each patient\'s environment live — accurate to sub-second latency — rendered in a navigable 3D space.',
+    outcome:
+      'Working prototype with real-time biometric sync and immersive VR visualization. Sub-second data latency verified.',
+    stack: ['Python', 'Raspberry Pi', 'MQTT', 'Unreal Engine 5', 'Node.js', 'TensorFlow Lite'],
+    tags: ['IoT', 'Raspberry Pi', 'Digital Twin', 'VR'],
+    links: { github: null, live: null },
   },
   {
     id: 3,
-    shortTitle: '5G Ray Tracing',
-    title: '5G Signal Rendering & Ray Tracing',
-    subtitle: 'Sionna RT Simulation + Python Visualization',
-    description: 'A physically-accurate 5G signal propagation simulator using ray-tracing algorithms, visualizing mmWave signal behavior in complex 3D environments.',
-    longDescription:
-      'Leveraging NVIDIA\'s Sionna ray-tracing engine, this project simulates 5G mmWave signal propagation through realistic 3D urban environments. The system models reflection, diffraction, and scattering of radio waves off surfaces, producing high-fidelity channel impulse responses. Results are visualized with custom Python rendering pipelines showing signal strength heatmaps, multipath clusters, and MIMO beam patterns.',
-    tags: ['5G', 'mmWave', 'Ray Tracing', 'Sionna', 'RF Simulation'],
-    features: [
-      'Physically-accurate ray tracing via Sionna RT engine',
-      'mmWave propagation with reflection, diffraction, scattering',
-      'Custom Python-based 3D visualization pipeline',
-      'MIMO beamforming pattern analysis',
-      'Urban channel model generation for network planning',
-    ],
+    index: '03',
+    title: 'SOS Wearable — B5G Emergency Response',
+    subtitle: 'Ultra-low latency emergency alert system on Beyond-5G networks',
+    year: '2024',
+    description:
+      'A wearable device that continuously monitors vital signs and physical state. On detecting a critical event — fall, cardiac anomaly, or manual trigger — it transmits an encrypted SOS payload over a B5G network slice to a cloud response center and the nearest hospital in under 10 milliseconds.',
+    problem:
+      'Emergency response systems are too slow. No existing consumer wearable can deliver sub-second alerts with simultaneous vitals and location data.',
+    solution:
+      'A 5G-sliced wearable with edge AI preprocessing that detects emergencies and notifies hospitals with full context faster than current systems.',
+    outcome:
+      'Hardware prototype with edge AI and encrypted 5G telemetry verified in lab. Sub-10ms alert latency achieved.',
+    stack: ['Embedded C', 'ESP32', 'B5G SDK', 'Python', 'AWS IoT', 'MQTT'],
+    tags: ['B5G', '5G', 'Wearable', 'Emergency Response', 'Edge Computing'],
+    links: { github: null, live: null },
+  },
+  {
+    id: 4,
+    index: '04',
+    title: '5G Signal Ray Tracing',
+    subtitle: 'Physically-accurate mmWave signal simulation using Sionna RT',
+    year: '2023',
+    description:
+      'A signal propagation simulator using NVIDIA\'s Sionna ray-tracing engine to model 5G mmWave behavior in realistic 3D urban environments. The system models reflection, diffraction, and scattering, producing high-fidelity channel impulse responses visualized as signal heatmaps and MIMO beam patterns.',
+    problem:
+      'Network engineers lack cost-effective, accurate tools to model 5G signal behavior in complex real-world environments before deploying infrastructure.',
+    solution:
+      'Physically-accurate ray tracing using Sionna with a custom Python visualization pipeline producing actionable channel models.',
+    outcome:
+      'Complete simulation pipeline producing validated channel models for urban 5G deployments. Results published in departmental research.',
     stack: ['Python', 'Sionna', 'TensorFlow', 'NumPy', 'Matplotlib', 'Blender'],
-    color: '#7b93f5',
-    gradient: 'linear-gradient(135deg, rgba(123,147,245,0.12), rgba(7,9,15,0.9))',
+    tags: ['5G', 'mmWave', 'Ray Tracing', 'Simulation', 'Research'],
+    links: { github: null, live: null },
   },
 ];

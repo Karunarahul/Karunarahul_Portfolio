@@ -1,161 +1,187 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import MagneticWrapper from '../ui/MagneticWrapper';
+import { Button } from '../ui/Button';
 
-const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
+const links = [
+  { label: 'About',      href: '#about'      },
+  { label: 'Projects',   href: '#projects'   },
   { label: 'Experience', href: '#experience' },
-  { label: 'Certifications', href: '#certifications' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Contact',    href: '#contact'    },
 ];
 
+function scrollTo(href) {
+  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const [menuOpen,  setMenuOpen]  = useState(false);
+  const [active,    setActive]    = useState('');
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 50);
+      // Track active section
+      const ids = ['about', 'projects', 'experience', 'contact'];
+      for (let i = ids.length - 1; i >= 0; i--) {
+        const el = document.getElementById(ids[i]);
+        if (el && el.getBoundingClientRect().top <= 120) {
+          setActive(ids[i]);
+          return;
+        }
+      }
+      setActive('');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const handleNavClick = (href) => {
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <motion.nav
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 lg:px-12 py-4"
-      style={{
-        background: scrolled ? 'rgba(2,8,23,0.85)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(20px)' : 'none',
-        borderBottom: scrolled ? '1px solid rgba(0,212,255,0.1)' : 'none',
-        transition: 'all 0.4s ease',
-      }}
-    >
-      {/* Logo */}
-      <MagneticWrapper strength={0.2}>
-        <a
-          href="#hero"
-          onClick={(e) => { e.preventDefault(); handleNavClick('#hero'); }}
-          className="font-heading font-bold text-xl"
-          style={{
-            background: 'linear-gradient(135deg, #4f6ef2, #7c6af7)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}
-        >
-          MKR<span style={{ WebkitTextFillColor: 'rgba(0,212,255,0.5)' }}>.</span>
-        </a>
-      </MagneticWrapper>
-
-      {/* Desktop Links */}
-      <ul className="hidden md:flex items-center gap-8">
-        {navLinks.map((link, i) => (
-          <motion.li
-            key={link.href}
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 * i + 0.3 }}
+    <>
+      <header
+        role="banner"
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+        style={{
+          background: scrolled
+            ? 'rgba(176,174,171,0.92)'
+            : 'rgba(176,174,171,0.0)',
+          backdropFilter: scrolled ? 'blur(16px) saturate(140%)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(138,135,131,0.18)' : '1px solid transparent',
+        }}
+      >
+        <div className="container-lg">
+          <nav
+            className="flex items-center justify-between h-14"
+            role="navigation"
+            aria-label="Main navigation"
           >
-            <MagneticWrapper strength={0.25}>
-              <a
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                className="relative text-sm font-body font-medium text-gray-300 hover:text-white transition-colors group"
+            {/* Name / Logo */}
+            <a
+              href="#"
+              onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+              className="font-display font-bold text-sm tracking-tight transition-opacity hover:opacity-70"
+              style={{ color: 'var(--primary)', letterSpacing: '-0.02em', fontFamily: 'var(--font-display)' }}
+              aria-label="Karuna Rahul — home"
+            >
+              Karuna Rahul
+            </a>
+
+            {/* Desktop links */}
+            <ul className="hidden md:flex items-center gap-1" role="menubar">
+              {links.map(link => {
+                const id = link.href.slice(1);
+                const isActive = active === id;
+                return (
+                  <li key={link.href} role="none">
+                    <a
+                      href={link.href}
+                      role="menuitem"
+                      onClick={e => { e.preventDefault(); scrollTo(link.href); }}
+                      className="relative px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200"
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        color: isActive ? 'var(--primary)' : 'var(--muted)',
+                        background: isActive ? 'rgba(10,10,10,0.06)' : 'transparent',
+                        letterSpacing: '-0.01em',
+                      }}
+                      onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = 'var(--secondary)'; }}
+                      onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = 'var(--muted)'; }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+
+            {/* CTA */}
+            <div className="hidden md:flex items-center gap-3">
+              <Button
+                href="mailto:karunarahul8885@gmail.com"
+                style={{ fontSize: '0.8125rem', padding: '0.5rem 1rem' }}
+                id="nav-cta"
               >
-                {link.label}
-                <span
-                  className="absolute -bottom-1 left-0 h-px w-0 group-hover:w-full transition-all duration-300"
-                  style={{ background: 'linear-gradient(90deg, #4f6ef2, #7c6af7)' }}
-                />
-              </a>
-            </MagneticWrapper>
-          </motion.li>
-        ))}
-      </ul>
+                Get in touch
+              </Button>
+            </div>
 
-      {/* CTA */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="hidden md:block"
-      >
-        <MagneticWrapper>
-          <a
-            href="mailto:karunarahul8885@gmail.com"
-            className="px-5 py-2 rounded-full text-sm font-heading font-semibold text-white"
-            style={{
-              background: 'rgba(0,212,255,0.1)',
-              border: '1px solid rgba(0,212,255,0.4)',
-              transition: 'all 0.3s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(0,212,255,0.2)';
-              e.currentTarget.style.boxShadow = '0 0 20px rgba(0,212,255,0.4)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(0,212,255,0.1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Hire Me
-          </a>
-        </MagneticWrapper>
-      </motion.div>
+            {/* Mobile hamburger */}
+            <button
+              className="md:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-lg transition-colors"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              style={{ background: menuOpen ? 'rgba(10,10,10,0.06)' : 'transparent' }}
+            >
+              <motion.span
+                animate={{ rotate: menuOpen ? 45 : 0, y: menuOpen ? 6 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="block h-px w-5 bg-primary rounded-full"
+                style={{ background: 'var(--primary)' }}
+              />
+              <motion.span
+                animate={{ opacity: menuOpen ? 0 : 1 }}
+                transition={{ duration: 0.15 }}
+                className="block h-px w-5 rounded-full"
+                style={{ background: 'var(--primary)' }}
+              />
+              <motion.span
+                animate={{ rotate: menuOpen ? -45 : 0, y: menuOpen ? -6 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="block h-px w-5 rounded-full"
+                style={{ background: 'var(--primary)' }}
+              />
+            </button>
+          </nav>
+        </div>
+      </header>
 
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden flex flex-col gap-1.5 p-2"
-        onClick={() => setMobileOpen(!mobileOpen)}
-        aria-label="Toggle menu"
-      >
-        {[0, 1, 2].map((i) => (
-          <motion.span
-            key={i}
-            animate={{
-              rotate: mobileOpen && i === 0 ? 45 : mobileOpen && i === 2 ? -45 : 0,
-              y: mobileOpen && i === 0 ? 8 : mobileOpen && i === 2 ? -8 : 0,
-              opacity: mobileOpen && i === 1 ? 0 : 1,
-            }}
-            className="block h-0.5 w-6"
-            style={{ background: '#4f6ef2' }}
-          />
-        ))}
-      </button>
-
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="absolute top-full left-0 right-0 glass-purple md:hidden"
-            style={{ borderTop: '1px solid rgba(0,212,255,0.1)' }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-14 left-0 right-0 z-40 md:hidden"
+            style={{
+              background: 'rgba(176,174,171,0.97)',
+              backdropFilter: 'blur(20px)',
+              borderBottom: '1px solid rgba(138,135,131,0.2)',
+            }}
           >
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={(e) => { e.preventDefault(); handleNavClick(link.href); }}
-                className="block px-6 py-4 text-gray-300 hover:text-white border-b font-body"
-                style={{ borderColor: 'rgba(255,255,255,0.05)' }}
-              >
-                {link.label}
-              </a>
-            ))}
+            <nav className="container-lg py-4 space-y-0.5">
+              {links.map(link => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={e => { e.preventDefault(); scrollTo(link.href); setMenuOpen(false); }}
+                  className="block py-3 px-2 text-sm font-medium rounded-lg transition-colors"
+                  style={{
+                    color: 'var(--secondary)',
+                    fontFamily: 'var(--font-body)',
+                    letterSpacing: '-0.01em',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--primary)'; e.currentTarget.style.background = 'rgba(10,10,10,0.04)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--secondary)'; e.currentTarget.style.background = 'transparent'; }}
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div className="pt-3">
+                <Button
+                  href="mailto:karunarahul8885@gmail.com"
+                  className="w-full justify-center"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get in touch
+                </Button>
+              </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </>
   );
 }

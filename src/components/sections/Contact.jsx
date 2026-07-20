@@ -1,236 +1,295 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { FaGithub, FaLinkedinIn, FaTwitter } from 'react-icons/fa';
-import SectionHeader from '../ui/SectionHeader';
-import GlowButton from '../ui/GlowButton';
-import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+import { useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { ArrowRight, Mail } from 'lucide-react';
+import { Button } from '../ui/Button';
 
-const socials = [
-  { Icon: FaGithub, label: 'GitHub', href: 'https://github.com/Karunarahul', color: '#fff' },
-  { Icon: FaLinkedinIn, label: 'LinkedIn', href: 'https://linkedin.com/in/karuna-rahul-mamidi', color: '#0ea5e9' },
-  { Icon: FaTwitter, label: 'Twitter', href: 'https://twitter.com/', color: '#4f6ef2' },
-];
+const LinkedInIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+    <rect x="2" y="9" width="4" height="12"/>
+    <circle cx="4" cy="4" r="2"/>
+  </svg>
+);
+const GithubIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+  </svg>
+);
 
-const contactInfo = [
-  { Icon: Mail, label: 'Academic Email', value: '2200040121ece@gmail.com', href: 'mailto:2200040121ece@gmail.com' },
-  { Icon: Mail, label: 'Personal Email', value: 'karunarahul8885@gmail.com', href: 'mailto:karunarahul8885@gmail.com' },
-  { Icon: Phone, label: 'Phone', value: '+91 98765 43210', href: 'tel:+919876543210' },
-  { Icon: MapPin, label: 'Location', value: 'KL University, Andhra Pradesh, India', href: '#' },
-];
+const inputStyle = {
+  width: '100%',
+  padding: '0.75rem 0',
+  background: 'transparent',
+  border: 'none',
+  borderBottom: '1px solid var(--border-soft)',
+  borderRadius: 0,
+  color: 'var(--primary)',
+  fontFamily: 'var(--font-body)',
+  fontSize: '0.9375rem',
+  outline: 'none',
+  transition: 'border-color 0.2s ease',
+};
+
+function InView({ children, delay = 0, className = '' }) {
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function ContactInput({ label, name, value, onChange, type = 'text', placeholder, required }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div>
+      <label
+        htmlFor={`contact-${name}`}
+        className="block text-xs font-semibold mb-2"
+        style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)', letterSpacing: '0.01em' }}
+      >
+        {label}{required && <span style={{ color: 'var(--border)' }}> *</span>}
+      </label>
+      <input
+        id={`contact-${name}`}
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required={required}
+        style={{
+          ...inputStyle,
+          borderBottomColor: focused ? 'var(--primary)' : 'var(--border-soft)',
+        }}
+        onFocus={() => setFocused(true)}
+        onBlur={()  => setFocused(false)}
+      />
+    </div>
+  );
+}
 
 export default function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [sent, setSent] = useState(false);
+  const [form,    setForm]    = useState({ name: '', email: '', message: '' });
+  const [sending, setSending] = useState(false);
+  const [sent,    setSent]    = useState(false);
 
-  const panelRef = useScrollAnimation(
-    { opacity: 0, y: 50 },
-    { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out' }
-  );
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleSubmit = async e => {
     e.preventDefault();
+    setSending(true);
+    await new Promise(r => setTimeout(r, 1000));
     setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    setSending(false);
+    setForm({ name: '', email: '', message: '' });
   };
 
   return (
-    <section id="contact" className="py-32 relative">
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 60% 50% at 50% 80%, rgba(0,212,255,0.06) 0%, transparent 70%)',
-        }}
-      />
+    <section id="contact" className="section" style={{ background: 'var(--bg)' }}>
+      <div className="container-lg">
 
-      <div className="section-container">
-        <SectionHeader
-          label="Get In Touch"
-          title="Let's Build Together"
-          subtitle="Open to research collaborations, internships, and innovative engineering projects."
-        />
+        <InView>
+          <p className="label mb-5">Contact</p>
+        </InView>
 
-        <div ref={panelRef} className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-          {/* Info Column */}
-          <div className="flex flex-col justify-between">
-            <div>
-              <p className="text-gray-400 text-lg leading-relaxed mb-10 font-body">
-                Whether you're interested in IoT development, AI research, digital twin systems,
-                or just want to talk technology — I'd love to connect.
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+
+          {/* Left: Heading + links */}
+          <div className="space-y-10">
+            <InView delay={0.08}>
+              <h2 className="display-md" style={{ lineHeight: '1.05' }}>
+                Let's work<br />together.
+              </h2>
+            </InView>
+
+            <InView delay={0.18}>
+              <p className="body-lg max-w-sm">
+                I'm open to provide internship opportunities, research collaborations,
+                interesting engineering problems, and conversations about AI,
+                IoT, and healthcare technology.
               </p>
+            </InView>
 
-              {/* Contact Items */}
-              <div className="space-y-4 mb-10">
-                {contactInfo.map(({ Icon, label, value, href }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    whileHover={{ x: 6 }}
-                    className="flex items-center gap-4 group"
-                    style={{ textDecoration: 'none' }}
+            <InView delay={0.28}>
+              <div className="space-y-4">
+                {/* Email */}
+                <a
+                  href="mailto:karunarahul8885@gmail.com"
+                  className="flex items-center gap-3 group"
+                  id="contact-email-link"
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
                   >
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                      style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)' }}
+                    <Mail size={15} style={{ color: 'var(--secondary)' }} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>Email</p>
+                    <p
+                      className="text-sm font-medium link-underline"
+                      style={{ color: 'var(--primary)', fontFamily: 'var(--font-body)' }}
                     >
-                      <Icon size={18} style={{ color: '#4f6ef2' }} />
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-500 font-body">{label}</p>
-                      <p className="text-white font-body text-sm group-hover:text-cyan-400 transition-colors">{value}</p>
-                    </div>
-                  </motion.a>
-                ))}
-              </div>
+                      karunarahul8885@gmail.com
+                    </p>
+                  </div>
+                </a>
 
-              {/* Socials */}
-              <div className="flex gap-3">
-                {socials.map(({ Icon, label, href, color }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ y: -4, scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="w-10 h-10 rounded-xl flex items-center justify-center glass"
-                    style={{ border: '1px solid rgba(255,255,255,0.1)' }}
-                    aria-label={label}
+                {/* LinkedIn */}
+                <a
+                  href="https://linkedin.com/in/karunarahul"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 group"
+                  id="contact-linkedin"
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
                   >
-                    <Icon size={18} style={{ color }} />
-                  </motion.a>
-                ))}
-              </div>
-            </div>
+                    <LinkedInIcon />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>LinkedIn</p>
+                    <p className="text-sm font-medium link-underline" style={{ color: 'var(--primary)', fontFamily: 'var(--font-body)' }}>
+                      linkedin.com/in/karunarahul
+                    </p>
+                  </div>
+                </a>
 
-            {/* Availability status */}
-            <div
-              className="mt-10 p-4 rounded-xl flex items-center gap-3"
-              style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)' }}
-            >
-              <span className="w-3 h-3 rounded-full bg-emerald-400 flex-shrink-0 animate-pulse" />
-              <p className="text-sm font-body text-gray-300">
-                <span className="text-emerald-400 font-medium">Available</span> for internships and research roles — 2025 grad
-              </p>
-            </div>
+                {/* GitHub */}
+                <a
+                  href="https://github.com/Karunarahul"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 group"
+                  id="contact-github"
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
+                  >
+                    <GithubIcon />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>GitHub</p>
+                    <p className="text-sm font-medium link-underline" style={{ color: 'var(--primary)', fontFamily: 'var(--font-body)' }}>
+                      github.com/Karunarahul
+                    </p>
+                  </div>
+                </a>
+
+                {/* Resume */}
+                <a
+                  href="/assets/karuna-rahul-profile.pdf"
+                  download
+                  className="flex items-center gap-3 group"
+                  id="contact-resume"
+                >
+                  <div
+                    className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
+                  >
+                    <ArrowRight size={15} style={{ color: 'var(--secondary)' }} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-medium uppercase tracking-wide mb-0.5" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>Resume</p>
+                    <p className="text-sm font-medium link-underline" style={{ color: 'var(--primary)', fontFamily: 'var(--font-body)' }}>
+                      Download PDF
+                    </p>
+                  </div>
+                </a>
+              </div>
+            </InView>
           </div>
 
-          {/* Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            className="glass rounded-2xl p-8"
-            style={{ border: '1px solid rgba(0,212,255,0.15)' }}
-          >
-            <div className="space-y-5">
-              {/* Name */}
-              <div>
-                <label className="block text-xs text-gray-500 font-body mb-2 uppercase tracking-wider">Name</label>
-                <input
-                  type="text"
+          {/* Right: Form */}
+          <InView delay={0.22}>
+            {sent ? (
+              <div className="flex flex-col items-start justify-center h-full min-h-[300px] space-y-4">
+                <div
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-lg"
+                  style={{ background: 'rgba(10,10,10,0.06)', border: '1px solid var(--border-soft)' }}
+                  aria-live="polite"
+                >
+                  ✓
+                </div>
+                <h3 className="display-sm">Message sent.</h3>
+                <p className="body-md">I'll get back to you within 24 hours.</p>
+                <Button
+                  onClick={() => setSent(false)}
+                  className="mt-4"
+                >
+                  Send another
+                </Button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-8" noValidate>
+                <ContactInput
+                  label="Name"
                   name="name"
-                  value={formData.name}
+                  value={form.name}
                   onChange={handleChange}
                   placeholder="Your name"
                   required
-                  className="w-full px-4 py-3 rounded-xl text-white text-sm font-body outline-none transition-all duration-300"
-                  style={{
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    color: 'white',
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'rgba(0,212,255,0.5)';
-                    e.target.style.boxShadow = '0 0 15px rgba(0,212,255,0.15)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(255,255,255,0.1)';
-                    e.target.style.boxShadow = 'none';
-                  }}
                 />
-              </div>
-
-              {/* Email */}
-              <div>
-                <label className="block text-xs text-gray-500 font-body mb-2 uppercase tracking-wider">Email</label>
-                <input
-                  type="email"
+                <ContactInput
+                  label="Email"
                   name="email"
-                  value={formData.email}
+                  value={form.email}
                   onChange={handleChange}
+                  type="email"
                   placeholder="your@email.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl text-white text-sm font-body outline-none transition-all duration-300"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'rgba(0,212,255,0.5)';
-                    e.target.style.boxShadow = '0 0 15px rgba(0,212,255,0.15)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(255,255,255,0.1)';
-                    e.target.style.boxShadow = 'none';
-                  }}
                 />
-              </div>
 
-              {/* Message */}
-              <div>
-                <label className="block text-xs text-gray-500 font-body mb-2 uppercase tracking-wider">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Tell me about your project or opportunity..."
-                  required
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-xl text-sm font-body outline-none transition-all duration-300 resize-none"
-                  style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = 'rgba(0,212,255,0.5)';
-                    e.target.style.boxShadow = '0 0 15px rgba(0,212,255,0.15)';
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = 'rgba(255,255,255,0.1)';
-                    e.target.style.boxShadow = 'none';
-                  }}
-                />
-              </div>
-
-              {/* Submit */}
-              <div className="pt-2">
-                {sent ? (
-                  <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className="text-center py-3 rounded-xl font-heading font-semibold text-emerald-400"
-                    style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)' }}
+                {/* Textarea */}
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="block text-xs font-semibold mb-2"
+                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
                   >
-                    ✓ Message Sent! I'll get back to you soon.
-                  </motion.div>
-                ) : (
-                  <GlowButton variant="mixed" className="w-full justify-center">
-                    <Send size={16} />
-                    Send Message
-                  </GlowButton>
-                )}
-              </div>
-            </div>
-          </motion.form>
-        </div>
-      </div>
+                    Message <span style={{ color: 'var(--border)' }}>*</span>
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    value={form.message}
+                    onChange={handleChange}
+                    required
+                    rows={5}
+                    placeholder="Tell me about what you're working on..."
+                    style={{
+                      ...inputStyle,
+                      resize: 'none',
+                      borderBottom: '1px solid var(--border-soft)',
+                    }}
+                    onFocus={e  => e.target.style.borderBottomColor = 'var(--primary)'}
+                    onBlur={e   => e.target.style.borderBottomColor = 'var(--border-soft)'}
+                  />
+                </div>
 
-      {/* Footer */}
-      <div className="section-container mt-24 pt-8" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-600 text-sm font-body">
-            © 2025 Mamidi Karuna Rahul. Crafted with passion &amp; physics.
-          </p>
-          <p className="text-gray-700 text-xs font-body">
-            Built with React + Vite + Framer Motion + GSAP
-          </p>
+                <Button
+                  type="submit"
+                  disabled={sending}
+                  id="contact-submit"
+                  aria-live="polite"
+                >
+                  {sending ? 'Sending...' : 'Send message'}
+                  {!sending && <ArrowRight size={14} aria-hidden="true" />}
+                </Button>
+              </form>
+            )}
+          </InView>
+
         </div>
       </div>
     </section>

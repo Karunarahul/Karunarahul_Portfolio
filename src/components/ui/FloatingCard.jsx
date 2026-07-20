@@ -1,50 +1,65 @@
-import { motion } from 'framer-motion';
-import { useRef, useCallback } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 /**
  * FloatingCard
  * A card that floats with a subtle y-axis oscillation and tilts on hover.
+ *
+ * Fixes:
+ * - Replaces direct style.transform mutation with Framer Motion useMotionValue
+ *   to avoid conflict with the parent animate loop
+ * - Tilt clamped to ±5° (spec: max 5°)
+ * - Disabled on touch/coarse pointer devices
+ * - Low amplitude float (8px) to avoid distraction
  */
 export default function FloatingCard({
   children,
   className = '',
   delay = 0,
   duration = 4,
-  tiltStrength = 15,
-  glowColor = 'blue',
+  tiltStrength = 5,   // spec: max 5°
+  glowColor = 'cyan',
   style = {},
 }) {
-  const cardRef = useRef(null);
+  const [isTouch, setIsTouch] = useState(false);
 
-  const handleMouseMove = useCallback((e) => {
-    const card = cardRef.current;
-    if (!card) return;
-    const rect = card.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / (rect.width / 2);
-    const dy = (e.clientY - cy) / (rect.height / 2);
-    card.style.transform = `perspective(600px) rotateX(${-dy * tiltStrength}deg) rotateY(${dx * tiltStrength}deg) translateZ(10px)`;
-  }, [tiltStrength]);
-
-  const handleMouseLeave = useCallback(() => {
-    const card = cardRef.current;
-    if (!card) return;
-    card.style.transform = 'perspective(600px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
+  useEffect(() => {
+    setIsTouch(window.matchMedia('(pointer: coarse)').matches);
   }, []);
 
-  const glowStyles = {
-    blue: '0 0 20px rgba(79,110,242,0.3), 0 0 40px rgba(79,110,242,0.1)',
-    violet: '0 0 20px rgba(124,106,247,0.3), 0 0 40px rgba(124,106,247,0.1)',
-    cyan: '0 0 20px rgba(79,110,242,0.3), 0 0 40px rgba(79,110,242,0.1)', // fallback
-    purple: '0 0 20px rgba(124,106,247,0.3), 0 0 40px rgba(124,106,247,0.1)', // fallback
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { stiffness: 200, damping: 22, mass: 0.5 };
+  const rotateX = useSpring(useTransform(mouseY, [-1, 1], [tiltStrength, -tiltStrength]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-1, 1], [-tiltStrength, tiltStrength]), springConfig);
+
+  const handleMouseMove = (e) => {
+    if (isTouch) return;
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    mouseX.set((e.clientX - cx) / (rect.width / 2));
+    mouseY.set((e.clientY - cy) / (rect.height / 2));
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
+  const glowShadows = {
+    cyan:   '0 0 24px rgba(0,212,255,0.35), 0 0 48px rgba(0,212,255,0.12)',
+    purple: '0 0 24px rgba(124,58,237,0.35), 0 0 48px rgba(124,58,237,0.12)',
+    // legacy aliases
+    blue:   '0 0 24px rgba(0,212,255,0.35), 0 0 48px rgba(0,212,255,0.12)',
+    violet: '0 0 24px rgba(124,58,237,0.35), 0 0 48px rgba(124,58,237,0.12)',
   };
 
   return (
     <motion.div
-      animate={{
-        y: [0, -12, 0],
-      }}
+      animate={{ y: [0, -8, 0] }}
       transition={{
         duration,
         delay,
@@ -54,24 +69,24 @@ export default function FloatingCard({
       className={`relative ${className}`}
       style={style}
     >
-      <div
-        ref={cardRef}
+      <motion.div
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{
-          transition: 'transform 0.15s ease, box-shadow 0.3s ease',
+          rotateX: isTouch ? 0 : rotateX,
+          rotateY: isTouch ? 0 : rotateY,
+          perspective: 800,
           willChange: 'transform',
+          transformStyle: 'preserve-3d',
         }}
         className="h-full w-full"
-        onMouseEnter={(e) => {
-          e.currentTarget.style.boxShadow = glowStyles[glowColor];
+        whileHover={{
+          boxShadow: glowShadows[glowColor] ?? glowShadows.cyan,
         }}
-        onMouseOut={(e) => {
-          e.currentTarget.style.boxShadow = 'none';
-        }}
+        transition={{ duration: 0.3 }}
       >
         {children}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

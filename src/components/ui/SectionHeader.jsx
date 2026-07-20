@@ -22,9 +22,9 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         transition={{ duration: 0.5 }}
         className="inline-block px-4 py-1 text-xs font-heading font-semibold uppercase tracking-widest rounded-full mb-4"
         style={{
-          background: 'rgba(0,212,255,0.1)',
-          border: '1px solid rgba(0,212,255,0.4)',
-          color: '#4f6ef2',
+          background: 'rgba(0,212,255,0.08)',
+          border: '1px solid rgba(0,212,255,0.35)',
+          color: '#00d4ff',
         }}
       >
         {label}
@@ -38,7 +38,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         transition={{ duration: 0.7, delay: 0.1 }}
         className="text-4xl md:text-5xl font-heading font-bold mb-4"
         style={{
-          background: 'linear-gradient(135deg, #ffffff, #4f6ef2, #7c6af7)',
+          background: 'linear-gradient(135deg, #ffffff, #00d4ff, #7c3aed)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           backgroundClip: 'text',
@@ -55,7 +55,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
         transition={{ duration: 0.8, delay: 0.2 }}
         className="h-px w-24 mb-4"
         style={{
-          background: 'linear-gradient(90deg, #4f6ef2, #7c6af7)',
+          background: 'linear-gradient(90deg, #00d4ff, #7c3aed)',
           transformOrigin: align === 'center' ? 'center' : 'left',
         }}
       />
@@ -66,7 +66,7 @@ export default function SectionHeader({ label, title, subtitle, align = 'center'
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="text-gray-400 text-lg max-w-2xl"
+          className="text-gray-400 text-base sm:text-lg max-w-2xl font-body"
         >
           {subtitle}
         </motion.p>

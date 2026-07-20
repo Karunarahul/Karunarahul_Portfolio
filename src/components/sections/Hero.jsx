@@ -1,217 +1,225 @@
-import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, Cpu, Zap, Radio, Globe, Activity, ChevronDown } from 'lucide-react';
-import GlowButton from '../ui/GlowButton';
-import { useParallax } from '../../hooks/useParallax';
+import { ArrowRight } from 'lucide-react';
+import { Button } from '../ui/Button';
 
-const TITLES = [
-  'IoT Systems Engineer',
-  'AI Developer',
-  'Digital Twin Architect',
-  '5G / 6G Researcher',
-  'Embedded Systems Designer',
-];
+function scrollTo(href) {
+  document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-const floatingIcons = [
-  { Icon: Wifi, x: '10%', y: '25%', delay: 0, size: 28, color: '#4f6ef2' },
-  { Icon: Cpu, x: '85%', y: '20%', delay: 0.8, size: 32, color: '#7c6af7' },
-  { Icon: Zap, x: '8%', y: '65%', delay: 1.6, size: 24, color: '#7b93f5' },
-  { Icon: Radio, x: '88%', y: '60%', delay: 0.4, size: 30, color: '#4f6ef2' },
-  { Icon: Globe, x: '15%', y: '45%', delay: 1.2, size: 22, color: '#22c55e' },
-  { Icon: Activity, x: '80%', y: '40%', delay: 2, size: 26, color: '#7c6af7' },
-];
+const fadeUp = (delay = 0) => ({
+  initial:    { opacity: 0, y: 28 },
+  animate:    { opacity: 1, y: 0 },
+  transition: { duration: 0.8, delay, ease: [0.22, 1, 0.36, 1] },
+});
+
+// A minimal SVG monogram / mark for the right side of the hero
+function HeroMark() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.94 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+      className="relative flex items-center justify-center select-none"
+      aria-hidden="true"
+    >
+      {/* Outer ring */}
+      <svg
+        viewBox="0 0 280 280"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="w-full max-w-[320px]"
+        aria-hidden="true"
+      >
+        {/* Background circle */}
+        <circle cx="140" cy="140" r="138" stroke="rgba(10,10,10,0.08)" strokeWidth="1" />
+        <circle cx="140" cy="140" r="110" stroke="rgba(10,10,10,0.05)" strokeWidth="1" />
+
+        {/* Initials */}
+        <text
+          x="140"
+          y="158"
+          textAnchor="middle"
+          fontFamily="'Satoshi', sans-serif"
+          fontWeight="900"
+          fontSize="72"
+          letterSpacing="-4"
+          fill="rgba(10,10,10,0.12)"
+        >
+          KR
+        </text>
+
+        {/* Tick marks — like a compass or engineering dial */}
+        {Array.from({ length: 24 }).map((_, i) => {
+          const angle = (i / 24) * Math.PI * 2 - Math.PI / 2;
+          const isMajor = i % 6 === 0;
+          const r1 = isMajor ? 130 : 133;
+          const r2 = 138;
+          const x1 = 140 + r1 * Math.cos(angle);
+          const y1 = 140 + r1 * Math.sin(angle);
+          const x2 = 140 + r2 * Math.cos(angle);
+          const y2 = 140 + r2 * Math.sin(angle);
+          return (
+            <line
+              key={i}
+              x1={x1} y1={y1} x2={x2} y2={y2}
+              stroke="rgba(10,10,10,0.14)"
+              strokeWidth={isMajor ? 1.5 : 0.75}
+            />
+          );
+        })}
+
+        {/* Cardinal labels */}
+        {[
+          { label: 'ECE', x: 140, y: 26,  anchor: 'middle' },
+          { label: 'AI',  x: 258, y: 145, anchor: 'start'  },
+          { label: 'IoT', x: 140, y: 264, anchor: 'middle' },
+          { label: 'XR',  x: 22,  y: 145, anchor: 'end'    },
+        ].map(({ label, x, y, anchor }) => (
+          <text
+            key={label}
+            x={x} y={y}
+            textAnchor={anchor}
+            fontFamily="'General Sans', sans-serif"
+            fontWeight="600"
+            fontSize="10"
+            letterSpacing="0.08em"
+            fill="rgba(10,10,10,0.30)"
+          >
+            {label}
+          </text>
+        ))}
+      </svg>
+
+      {/* Rotating element */}
+      <motion.div
+        className="absolute inset-0 flex items-center justify-center"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 80, repeat: Infinity, ease: 'linear' }}
+      >
+        <svg viewBox="0 0 280 280" className="w-full max-w-[320px]" aria-hidden="true">
+          <circle
+            cx="140" cy="140" r="138"
+            fill="none"
+            stroke="rgba(10,10,10,0.06)"
+            strokeWidth="1"
+            strokeDasharray="4 16"
+          />
+        </svg>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
-  const parallax = useParallax();
-  const [titleIndex, setTitleIndex] = useState(0);
-  const [displayed, setDisplayed] = useState('');
-  const [deleting, setDeleting] = useState(false);
-
-  // Typewriter effect
-  useEffect(() => {
-    const current = TITLES[titleIndex];
-    let timeout;
-    if (!deleting && displayed.length < current.length) {
-      timeout = setTimeout(() => setDisplayed(current.slice(0, displayed.length + 1)), 60);
-    } else if (!deleting && displayed.length === current.length) {
-      timeout = setTimeout(() => setDeleting(true), 1800);
-    } else if (deleting && displayed.length > 0) {
-      timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 30);
-    } else if (deleting && displayed.length === 0) {
-      setDeleting(false);
-      setTitleIndex((i) => (i + 1) % TITLES.length);
-    }
-    return () => clearTimeout(timeout);
-  }, [displayed, deleting, titleIndex]);
-
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center"
+      style={{ background: 'var(--bg)' }}
     >
-      {/* Background radial glow */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,212,255,0.06) 0%, transparent 70%)',
-        }}
-      />
+      <div className="container-lg w-full pt-24 pb-16">
+        <div className="grid lg:grid-cols-[1fr_auto] gap-16 lg:gap-24 items-center">
 
-      {/* Floating Icons */}
-      {floatingIcons.map(({ Icon, x, y, delay, size, color }, i) => (
-        <motion.div
-          key={i}
-          animate={{ y: [0, -16, 0] }}
-          transition={{ duration: 4 + i * 0.5, delay, repeat: Infinity, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            left: x,
-            top: y,
-            x: `${parallax.x * (8 + i * 3)}px`,
-            y: `${parallax.y * (6 + i * 2)}px`,
-            color,
-            filter: `drop-shadow(0 0 10px ${color})`,
-            opacity: 0.7,
-            zIndex: 1,
-          }}
-        >
-          <Icon size={size} />
-        </motion.div>
-      ))}
+          {/* ── Left: Content ─────────────────────────── */}
+          <div className="space-y-8 max-w-2xl">
 
-      {/* Main content */}
-      <div className="section-container relative z-10 text-center px-4">
-        {/* Greeting chip */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-sm font-medium font-body"
-          style={{
-            background: 'rgba(0,212,255,0.08)',
-            border: '1px solid rgba(0,212,255,0.25)',
-            color: '#4f6ef2',
-          }}
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          Available for research collaborations &amp; opportunities
-        </motion.div>
+            {/* Role badge */}
+            <motion.div {...fadeUp(0.1)}>
+              <span
+                className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase"
+                style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)', letterSpacing: '0.10em' }}
+              >
+                <span
+                  className="w-4 h-px inline-block"
+                  style={{ background: 'var(--border)' }}
+                  aria-hidden="true"
+                />
+                Founder SafeVitals XR
+              </span>
+            </motion.div>
 
-        {/* Name */}
-        <motion.h1
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="font-heading font-black text-5xl md:text-7xl lg:text-8xl mb-4 leading-tight"
-        >
-          <span className="block text-white">Mamidi</span>
-          <span
-            className="block"
-            style={{
-              background: 'linear-gradient(135deg, #4f6ef2 0%, #7c6af7 50%, #7b93f5 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            Karuna Rahul
-          </span>
-        </motion.h1>
+            {/* Name */}
+            <motion.h1 {...fadeUp(0.2)} className="display-xl" style={{ lineHeight: '0.90' }}>
+              Karuna<br />Rahul<br />
+              <span style={{ color: 'var(--border)' }}>Mamidi</span>
+            </motion.h1>
 
-        {/* Subtitle bar */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.9 }}
-          className="flex items-center justify-center gap-2 mb-6"
-        >
-          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, transparent, #4f6ef2)' }} />
-          <span className="text-sm font-body text-gray-400 uppercase tracking-widest">ECE Engineer</span>
-          <span className="h-px flex-1 max-w-16" style={{ background: 'linear-gradient(90deg, #7c6af7, transparent)' }} />
-        </motion.div>
+            {/* Description */}
+            <motion.p {...fadeUp(0.35)} className="body-lg max-w-lg">
+              Graduated from ECE, student at KL University, building at the intersection of
+              AI, embedded systems, IoT, and Extended Reality.
+              My research and projects focus on healthcare technology, 5G networks,
+              and intelligent edge systems — including SafeVitals XR, a remote patient
+              monitoring platform I founded.
+            </motion.p>
 
-        {/* Typewriter */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1 }}
-          className="text-xl md:text-2xl font-heading font-semibold mb-10 h-8"
-          style={{ color: '#4f6ef2' }}
-        >
-          {displayed}
-          <span className="animate-pulse ml-0.5">|</span>
-        </motion.div>
+            {/* CTAs */}
+            <motion.div {...fadeUp(0.5)} className="flex flex-wrap gap-3">
+              <Button
+                onClick={() => scrollTo('#projects')}
+                id="hero-cta-projects"
+              >
+                View Projects
+                <ArrowRight size={14} aria-hidden="true" />
+              </Button>
+              <Button
+                href="/assets/karuna-rahul-profile.pdf"
+                download
+                id="hero-cta-resume"
+              >
+                Resume
+              </Button>
+              <Button
+                onClick={() => scrollTo('#contact')}
+                id="hero-cta-contact"
+              >
+                Contact
+              </Button>
+            </motion.div>
 
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-          className="text-gray-400 text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-body"
-        >
-          Building the future through IoT ecosystems, AI-driven healthcare systems,
-          digital twin architectures, and next-generation 5G/6G communication networks.
-        </motion.p>
+            {/* Quick facts */}
+            <motion.div {...fadeUp(0.65)}>
+              <div className="flex flex-wrap gap-x-8 gap-y-2 pt-2">
+                {[
+                  { label: 'KL University, Andhra Pradesh, India', note: 'B.Tech ECE · 2022–2026' },
+                  { label: '',      note: '' },
+                ].map(({ label, note }) => (
+                  <div key={label}>
+                    <p
+                      className="text-sm font-semibold"
+                      style={{ color: 'var(--primary)', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}
+                    >
+                      {label}
+                    </p>
+                    <p className="text-xs" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>
+                      {note}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
 
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.4 }}
-          className="flex flex-wrap items-center justify-center gap-4"
-        >
-          <GlowButton
-            variant="mixed"
-            onClick={() => document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            View My Projects ↗
-          </GlowButton>
-          <GlowButton
-            variant="cyan"
-            href="mailto:karunarahul8885@gmail.com"
-          >
-            Contact Me
-          </GlowButton>
-        </motion.div>
-
-        {/* Tech tags */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.8 }}
-          className="flex flex-wrap justify-center gap-2 mt-12"
-        >
-          {['IoT', 'AI/ML', 'Digital Twin', '5G/6G', 'Raspberry Pi', 'Unreal Engine', 'Python', 'Embedded C'].map((tag) => (
-            <span
-              key={tag}
-              className="px-3 py-1 text-xs rounded-full font-body"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                color: 'rgba(255,255,255,0.5)',
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </motion.div>
+          {/* ── Right: Engineering mark ────────────────── */}
+          <div className="hidden lg:flex items-center justify-center w-72">
+            <HeroMark />
+          </div>
+        </div>
       </div>
 
-      {/* Scroll indicator */}
+      {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
+        transition={{ delay: 2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{ color: 'rgba(0,212,255,0.6)' }}
+        aria-hidden="true"
       >
-        <span className="text-xs font-body tracking-widest uppercase">Scroll</span>
         <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: 'easeInOut' }}
-        >
-          <ChevronDown size={20} />
-        </motion.div>
+          style={{ width: 1, height: 48, background: 'var(--border-soft)' }}
+          animate={{ scaleY: [1, 0.3, 1], opacity: [0.5, 1, 0.5] }}
+          transition={{ duration: 2.5, repeat: Infinity }}
+        />
       </motion.div>
     </section>
   );

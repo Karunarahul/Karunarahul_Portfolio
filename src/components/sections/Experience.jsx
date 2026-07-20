@@ -1,80 +1,144 @@
-import { motion } from 'framer-motion';
-import SectionHeader from '../ui/SectionHeader';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { experience } from '../../data/experience';
+
+function InView({ children, delay = 0, className = '' }) {
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function ExperienceItem({ item, index }) {
+  return (
+    <InView delay={index * 0.08}>
+      <div
+        className="group"
+        style={{ borderTop: '1px solid var(--border-soft)' }}
+      >
+        <div className="py-8 grid sm:grid-cols-[160px_1fr] lg:grid-cols-[200px_1fr] gap-5 sm:gap-10">
+
+          {/* Left: meta */}
+          <div className="space-y-1.5">
+            <span
+              className="text-xs font-semibold tabular-nums block"
+              style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)', letterSpacing: '-0.01em' }}
+            >
+              {item.period}
+            </span>
+            <span
+              className="inline-block px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider rounded"
+              style={{
+                background: 'rgba(10,10,10,0.05)',
+                border: '1px solid var(--border-soft)',
+                color: 'var(--muted)',
+                fontFamily: 'var(--font-body)',
+              }}
+            >
+              {item.type}
+            </span>
+          </div>
+
+          {/* Right: content */}
+          <div>
+            <div className="flex items-start justify-between gap-4 mb-2">
+              <div>
+                <h3
+                  className="text-base font-bold mb-0.5"
+                  style={{
+                    color: 'var(--primary)',
+                    fontFamily: 'var(--font-display)',
+                    letterSpacing: '-0.025em',
+                  }}
+                >
+                  {item.role}
+                </h3>
+                <p
+                  className="text-sm font-medium"
+                  style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                >
+                  {item.org}
+                </p>
+              </div>
+            </div>
+
+            <p
+              className="text-sm leading-relaxed mb-4"
+              style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+            >
+              {item.description}
+            </p>
+
+            {item.highlights?.length > 0 && (
+              <ul className="space-y-1.5">
+                {item.highlights.map(h => (
+                  <li
+                    key={h}
+                    className="flex items-start gap-2.5 text-xs"
+                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                  >
+                    <span
+                      className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
+                      style={{ background: 'var(--border)' }}
+                      aria-hidden="true"
+                    />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+    </InView>
+  );
+}
 
 export default function Experience() {
   return (
-    <section id="experience" className="py-32 relative">
-      <div className="section-container">
-        <SectionHeader
-          label="Leadership"
-          title="Experience"
-          subtitle="Building communities and leading technical initiatives alongside engineering studies."
-        />
+    <section
+      id="experience"
+      className="section"
+      style={{
+        background: 'rgba(168,166,163,0.3)',
+        borderTop: '1px solid var(--border-soft)',
+        borderBottom: '1px solid var(--border-soft)',
+      }}
+    >
+      <div className="container-lg">
+
+        <InView>
+          <p className="label mb-5">Experience</p>
+        </InView>
+
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 mb-14">
+          <InView delay={0.08}>
+            <h2 className="display-md">Work &<br />Leadership</h2>
+          </InView>
+          <InView delay={0.18}>
+            <p className="body-md max-w-sm mt-1">
+              Professional experience, student leadership, and research positions across engineering and product development.
+            </p>
+          </InView>
+        </div>
 
         {/* Timeline */}
-        <div className="relative max-w-3xl mx-auto">
-          {/* Center line */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px hidden md:block"
-            style={{ background: 'linear-gradient(to bottom, #4f6ef2, #7c6af7, transparent)' }}
-          />
-
+        <div>
           {experience.map((item, i) => (
-            <motion.div
-              key={item.id}
-              initial={{ opacity: 0, x: item.side === 'left' ? -60 : 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: i * 0.2, ease: 'power3.out' }}
-              className={`relative flex items-start mb-16 ${
-                item.side === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
-              } flex-col`}
-            >
-              {/* Card */}
-              <div
-                className={`w-full md:w-5/12 glass rounded-2xl p-6 ${
-                  item.side === 'left' ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'
-                }`}
-                style={{ border: `1px solid ${item.color}25` }}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <span
-                    className="w-2 h-2 rounded-full"
-                    style={{ background: item.color, boxShadow: `0 0 8px ${item.color}` }}
-                  />
-                  <span className="text-xs font-body" style={{ color: item.color }}>{item.period}</span>
-                </div>
-
-                <h3 className="font-heading font-bold text-white text-xl mb-1">{item.role}</h3>
-                <p className="font-body text-sm font-medium mb-3" style={{ color: item.color }}>@ {item.org}</p>
-                <p className="text-gray-400 text-sm leading-relaxed font-body mb-4">{item.description}</p>
-
-                <ul className="space-y-1.5">
-                  {item.highlights.map((h) => (
-                    <li key={h} className="flex items-center gap-2 text-xs text-gray-500 font-body">
-                      <span style={{ color: item.color }}>▹</span> {h}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Center dot */}
-              <motion.div
-                whileInView={{ scale: [0, 1.3, 1] }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.2 + 0.3 }}
-                className="hidden md:block absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full z-10"
-                style={{
-                  background: item.color,
-                  boxShadow: `0 0 15px ${item.color}, 0 0 30px ${item.color}50`,
-                  border: '2px solid #020817',
-                  top: '28px',
-                }}
-              />
-            </motion.div>
+            <ExperienceItem key={item.id} item={item} index={i} />
           ))}
+          <div className="divider" />
         </div>
+
       </div>
     </section>
   );

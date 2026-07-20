@@ -1,42 +1,75 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import ParticleBackground from './components/background/ParticleBackground';
+import { useEffect } from 'react';
+import { motion, useScroll, useSpring } from 'framer-motion';
+
 import CustomCursor from './components/layout/CustomCursor';
-import Navbar from './components/layout/Navbar';
-import Hero from './components/sections/Hero';
-import About from './components/sections/About';
-import Skills from './components/sections/Skills';
-import Projects from './components/sections/Projects';
-import Experience from './components/sections/Experience';
-import Certifications from './components/sections/Certifications';
-import Contact from './components/sections/Contact';
+import Navbar       from './components/layout/Navbar';
+import Hero         from './components/sections/Hero';
+import About        from './components/sections/About';
+import Skills       from './components/sections/Skills';
+import Projects     from './components/sections/Projects';
+import Experience   from './components/sections/Experience';
+import Contact      from './components/sections/Contact';
+import Footer       from './components/sections/Footer';
+
 import './styles/globals.css';
 
-export default function App() {
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 40 });
   return (
-    <div className="relative min-h-screen" style={{ background: 'var(--color-bg)' }}>
-      {/* Neural net particle canvas (z-index: 0) */}
-      <ParticleBackground />
+    <motion.div
+      id="scroll-progress"
+      style={{ scaleX }}
+      aria-hidden="true"
+    />
+  );
+}
 
-      {/* Custom cursor (z-index: 9998-9999) */}
+export default function App() {
+  // Skip-to-content link handling
+  useEffect(() => {
+    const skip = document.getElementById('skip-nav');
+    if (skip) {
+      skip.addEventListener('click', e => {
+        e.preventDefault();
+        document.getElementById('main-content')?.focus();
+      });
+    }
+  }, []);
+
+  return (
+    <>
+      {/* Accessibility: skip nav */}
+      <a
+        id="skip-nav"
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:rounded-lg"
+        style={{ background: 'var(--primary)', color: '#F5F4F2' }}
+      >
+        Skip to content
+      </a>
+
+      {/* Scroll indicator */}
+      <ScrollProgress />
+
+      {/* Cursor */}
       <CustomCursor />
 
-      {/* Sticky navbar (z-index: 40) */}
+      {/* Navigation */}
       <Navbar />
 
-      {/* Page content (z-index: 1+) */}
-      <motion.main
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-      >
+      {/* Main content */}
+      <main id="main-content" tabIndex={-1} style={{ outline: 'none' }}>
         <Hero />
         <About />
         <Skills />
         <Projects />
         <Experience />
-        <Certifications />
         <Contact />
-      </motion.main>
-    </div>
+      </main>
+
+      {/* Footer */}
+      <Footer />
+    </>
   );
 }

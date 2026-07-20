@@ -1,93 +1,117 @@
-import { motion } from 'framer-motion';
-import SectionHeader from '../ui/SectionHeader';
-import FloatingCard from '../ui/FloatingCard';
-import { skills } from '../../data/skills';
-import { useStaggerAnimation } from '../../hooks/useScrollAnimation';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-const categories = [...new Set(skills.map((s) => s.category))];
+// Grouped skills — no icons, no colors, just clean text pills
+const skillGroups = [
+  {
+    category: 'Programming',
+    skills: ['Python', 'C / Embedded C', 'Java', 'JavaScript', 'TypeScript'],
+  },
+  {
+    category: 'Embedded & Hardware',
+    skills: ['ESP32', 'Arduino', 'Raspberry Pi', 'RTOS', 'MQTT', 'I2C / SPI', 'UART'],
+  },
+  {
+    category: 'AI & Machine Learning',
+    skills: ['TensorFlow', 'TensorFlow Lite', 'Keras', 'Scikit-learn', 'OpenCV', 'NLP'],
+  },
+  {
+    category: 'Networking & Telecom',
+    skills: ['5G / B5G', 'mmWave', 'Sionna RT', 'Cisco Packet Tracer', 'Wireshark', 'Network Slicing'],
+  },
+  {
+    category: 'Web & Cloud',
+    skills: ['React', 'Next.js', 'FastAPI', 'Node.js', 'Supabase', 'AWS IoT', 'Firebase'],
+  },
+  {
+    category: '3D & Simulation',
+    skills: ['Unreal Engine 5', 'Blender', 'Digital Twins', 'MATLAB', 'Ray Tracing'],
+  },
+  {
+    category: 'Tools',
+    skills: ['Git', 'Linux', 'TinkerCad', 'Figma', 'VS Code'],
+  },
+];
+
+function InView({ children, delay = 0, className = '' }) {
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function Skills() {
-  const gridRef = useStaggerAnimation(
-    '.skill-card',
-    { opacity: 0, y: 40, scale: 0.9 },
-    { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.7)' },
-    0.08
-  );
-
   return (
-    <section id="skills" className="py-32 relative">
-      {/* Background accent */}
-      <div
-        className="absolute left-0 top-1/3 w-80 h-80 rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(0,212,255,0.07) 0%, transparent 70%)',
-          filter: 'blur(50px)',
-        }}
-      />
+    <section
+      id="skills"
+      className="section"
+      style={{ background: 'rgba(168,166,163,0.3)', borderTop: '1px solid var(--border-soft)', borderBottom: '1px solid var(--border-soft)' }}
+      aria-label="Skills and technologies"
+    >
+      <div className="container-lg">
 
-      <div className="section-container">
-        <SectionHeader
-          label="Tech Stack"
-          title="Skills & Tools"
-          subtitle="A curated arsenal of tools, languages, and platforms I use to build next-gen systems."
-        />
+        <InView>
+          <p className="label mb-5">Skills</p>
+        </InView>
 
-        {/* Category Legend */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
-            <span
-              key={cat}
-              className="px-3 py-1 text-xs rounded-full font-body"
-              style={{
-                background: 'rgba(0,212,255,0.05)',
-                border: '1px solid rgba(0,212,255,0.2)',
-                color: 'rgba(0,212,255,0.8)',
-              }}
-            >
-              {cat}
-            </span>
-          ))}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 mb-8">
+          <InView delay={0.08}>
+            <h2 className="display-md">Technology</h2>
+          </InView>
+          <InView delay={0.16}>
+            <p className="body-md max-w-sm mt-1">
+              The tools and technologies I use across hardware, software, and research.
+            </p>
+          </InView>
         </div>
 
-        <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {skills.map(({ name, icon: Icon, category, color }, i) => (
-            <FloatingCard
-              key={name}
-              delay={i * 0.1}
-              duration={3.5 + (i % 4) * 0.5}
-              className="skill-card"
-            >
-              <motion.div
-                whileHover={{ scale: 1.04 }}
-                className="glass rounded-xl p-5 flex flex-col items-center text-center gap-3 group"
-                style={{ border: `1px solid ${color}20` }}
-                whileTap={{ scale: 0.97 }}
-              >
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300"
+        {/* Skill groups */}
+        <div className="space-y-8">
+          {skillGroups.map((group, gi) => (
+            <InView key={group.category} delay={gi * 0.06}>
+              <div className="grid sm:grid-cols-[160px_1fr] gap-4 sm:gap-8 items-start">
+                <p
+                  className="text-xs font-semibold pt-1"
                   style={{
-                    background: `${color}15`,
-                    boxShadow: `0 0 0px ${color}00`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = `0 0 20px ${color}40`;
-                    e.currentTarget.style.background = `${color}25`;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = `0 0 0px ${color}00`;
-                    e.currentTarget.style.background = `${color}15`;
+                    color: 'var(--muted)',
+                    fontFamily: 'var(--font-body)',
+                    letterSpacing: '-0.01em',
                   }}
                 >
-                  {Icon && <Icon size={24} style={{ color }} />}
+                  {group.category}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {group.skills.map((skill, si) => (
+                    <motion.span
+                      key={skill}
+                      className="pill"
+                      initial={{ opacity: 0, scale: 0.94 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true, margin: '-40px' }}
+                      transition={{ duration: 0.4, delay: si * 0.03 }}
+                      whileHover={{ y: -2 }}
+                    >
+                      {skill}
+                    </motion.span>
+                  ))}
                 </div>
-                <div>
-                  <p className="font-heading font-semibold text-white text-sm">{name}</p>
-                  <p className="text-xs text-gray-600 mt-0.5 font-body">{category}</p>
-                </div>
-              </motion.div>
-            </FloatingCard>
+              </div>
+              {gi < skillGroups.length - 1 && (
+                <div className="divider mt-8" />
+              )}
+            </InView>
           ))}
         </div>
+
       </div>
     </section>
   );

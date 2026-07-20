@@ -1,122 +1,180 @@
-import { motion } from 'framer-motion';
-import { Wifi, Cpu, Heart, Radio } from 'lucide-react';
-import SectionHeader from '../ui/SectionHeader';
-import FloatingCard from '../ui/FloatingCard';
-import { useScrollAnimation } from '../../hooks/useScrollAnimation';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { education } from '../../data/education';
+import { certifications } from '../../data/experience';
+import { CardSpotlight } from '../ui/CardSpotlight';
 
-const highlights = [
-  {
-    Icon: Wifi,
-    title: 'IoT Systems',
-    desc: 'Designing end-to-end IoT architectures with MQTT, edge computing, and cloud integration.',
-    color: '#4f6ef2',
-    delay: 0,
-  },
-  {
-    Icon: Cpu,
-    title: 'Embedded Systems',
-    desc: 'Low-level programming on ESP32, Raspberry Pi, AVR — from bare metal to RTOS.',
-    color: '#7c6af7',
-    delay: 0.3,
-  },
-  {
-    Icon: Heart,
-    title: 'AI Healthcare',
-    desc: 'Applying machine learning to real-time biometric analysis and patient monitoring systems.',
-    color: '#ec4899',
-    delay: 0.6,
-  },
-  {
-    Icon: Radio,
-    title: '5G / 6G Research',
-    desc: 'Exploring mmWave propagation, network slicing, and next-gen telecom protocols.',
-    color: '#22c55e',
-    delay: 0.9,
-  },
-];
+const reveal = {
+  initial:  { opacity: 0, y: 24 },
+  animate:  { opacity: 1, y: 0 },
+  transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] },
+};
+
+function InView({ children, delay = 0, className = '' }) {
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-60px' });
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 export default function About() {
-  const textRef = useScrollAnimation(
-    { opacity: 0, x: -50 },
-    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' }
-  );
-
   return (
-    <section id="about" className="py-32 relative">
-      {/* Background accent */}
-      <div
-        className="absolute right-0 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)',
-          filter: 'blur(40px)',
-        }}
-      />
+    <section id="about" className="section" style={{ background: 'var(--bg)' }}>
+      <div className="container-lg">
 
-      <div className="section-container">
-        <SectionHeader
-          label="About Me"
-          title="Engineering Tomorrow"
-          subtitle="Turning complex technological challenges into elegant, real-world solutions."
-        />
+        {/* Section header */}
+        <InView>
+          <p className="label mb-5">About</p>
+        </InView>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Text */}
-          <div ref={textRef}>
-            <p className="text-gray-300 text-lg leading-relaxed mb-6 font-body">
-              I'm <span style={{ color: '#4f6ef2', fontWeight: 600 }}>Mamidi Karuna Rahul</span>, a final-year
-              Electronics and Communication Engineering student at KL University with a deep passion for
-              building intelligent, connected systems that bridge the physical and digital worlds.
+        {/* Split: large text left, detail right */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 mb-20">
+
+          {/* Left: Heading */}
+          <InView delay={0.08}>
+            <h2 className="display-md" style={{ lineHeight: '1.05' }}>
+              Engineer.<br />
+              Researcher.<br />
+              Builder.
+            </h2>
+          </InView>
+
+          {/* Right: Body */}
+          <InView delay={0.18} className="space-y-5">
+            <p className="body-lg">
+              Graduated in Electronics & Communication Engineering, student at KL University. My work sits at the intersection of hardware and intelligence —
+              building systems that make embedded devices smarter, networks faster, and healthcare
+              more accessible.
             </p>
-            <p className="text-gray-400 text-base leading-relaxed mb-6 font-body">
-              My work sits at the intersection of IoT hardware, AI-driven analytics, digital twin
-              simulation, and next-generation 5G communication. I believe technology's highest purpose
-              is improving human lives — which drives my focus on healthcare applications.
+            <p className="body-md">
+              My technical interests include IoT system design, AI/ML applied to real-world sensors,
+              5G and Beyond-5G network simulation, Digital Twin architectures, and Extended Reality
+              for industrial and medical applications.
             </p>
-            <p className="text-gray-400 text-base leading-relaxed font-body">
-              Beyond engineering, I serve as President of the Pulse ECE Student Body, leading 300+ students
-              and fostering a culture of innovation, collaboration, and technical excellence.
+            <p className="body-md">
+              Beyond engineering, I lead the Pulse ECE Student Body (800+ members) as Vice-President,
+              drive research initiatives, and Founded SafeVitals XR — a remote patient monitoring
+              system that I built from hardware prototype to cloud backend.
             </p>
+          </InView>
+        </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-4 mt-10">
-              {[
-                { value: '3+', label: 'Major Projects' },
-                { value: '300+', label: 'Students Led' },
-                { value: '4+', label: 'Certifications' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="text-center p-4 rounded-xl glass"
-                  style={{ border: '1px solid rgba(0,212,255,0.1)' }}
-                >
-                  <p className="text-2xl font-heading font-bold" style={{ color: '#4f6ef2' }}>{stat.value}</p>
-                  <p className="text-xs text-gray-500 font-body mt-1">{stat.label}</p>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* Divider */}
+        <InView>
+          <div className="divider mb-16" />
+        </InView>
 
-          {/* Highlight Cards */}
-          <div className="grid grid-cols-2 gap-4">
-            {highlights.map(({ Icon, title, desc, color, delay }, i) => (
-              <FloatingCard key={title} delay={delay} duration={4 + i * 0.4} glowColor={color === '#4f6ef2' ? 'blue' : 'violet'}>
-                <div
-                  className="p-5 rounded-xl h-full glass"
-                  style={{ border: `1px solid ${color}22` }}
-                >
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center mb-3"
-                    style={{ background: `${color}18` }}
+        {/* Education */}
+        <InView delay={0.08}>
+          <p className="label mb-10">Education</p>
+        </InView>
+
+        <div className="space-y-0">
+          {education.map((edu, i) => (
+            <InView key={edu.id} delay={i * 0.1}>
+              <div
+                className="grid sm:grid-cols-[1fr_auto] gap-4 items-start py-7"
+                style={{ borderTop: '1px solid var(--border-soft)' }}
+              >
+                <div>
+                  <h3
+                    className="text-base font-semibold mb-0.5"
+                    style={{
+                      color: 'var(--primary)',
+                      fontFamily: 'var(--font-display)',
+                      letterSpacing: '-0.025em',
+                    }}
                   >
-                    <Icon size={20} style={{ color }} />
-                  </div>
-                  <h3 className="font-heading font-semibold text-white text-sm mb-2">{title}</h3>
-                  <p className="text-gray-500 text-xs leading-relaxed font-body">{desc}</p>
+                    {edu.degree}
+                  </h3>
+                  <p className="text-sm" style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}>
+                    {edu.institution} · {edu.location}
+                  </p>
+                  {edu.highlights?.length > 0 && (
+                    <ul className="mt-3 space-y-1">
+                      {edu.highlights.slice(0, 3).map(h => (
+                        <li
+                          key={h}
+                          className="flex items-start gap-2 text-xs"
+                          style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                        >
+                          <span
+                            className="mt-1.5 w-1 h-1 rounded-full flex-shrink-0"
+                            style={{ background: 'var(--border)' }}
+                            aria-hidden="true"
+                          />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-              </FloatingCard>
+                <div className="text-right">
+                  <span
+                    className="text-xs font-semibold"
+                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)', letterSpacing: '-0.01em' }}
+                  >
+                    {edu.period}
+                  </span>
+                  {edu.grade && (
+                    <p
+                      className="text-xs mt-0.5"
+                      style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                    >
+                      {edu.grade}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </InView>
+          ))}
+
+          {/* Bottom border */}
+          <div className="divider" />
+        </div>
+
+        {/* Certifications — minimal grid */}
+        <div className="mt-16">
+          <InView>
+            <p className="label mb-8">Certifications</p>
+          </InView>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {certifications.map((cert, i) => (
+              <InView key={cert.id} delay={i * 0.06} className="h-full">
+                <CardSpotlight className="p-5 h-full">
+                  <p
+                    className="text-sm font-semibold mb-0.5"
+                    style={{ color: 'var(--primary)', fontFamily: 'var(--font-display)', letterSpacing: '-0.02em' }}
+                  >
+                    {cert.name}
+                  </p>
+                  <p
+                    className="text-xs font-medium mb-2"
+                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                  >
+                    {cert.org} · {cert.year}
+                  </p>
+                  <p
+                    className="text-xs leading-relaxed"
+                    style={{ color: 'var(--muted)', fontFamily: 'var(--font-body)' }}
+                  >
+                    {cert.description}
+                  </p>
+                </CardSpotlight>
+              </InView>
             ))}
           </div>
         </div>
+
       </div>
     </section>
   );
